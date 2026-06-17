@@ -1,0 +1,16 @@
+{
+  "files.exclude": {
+    "**/.angular": true,
+    "**/bin": true,
+    "**/dist": true,
+    "**/node_modules": true,
+    "**/obj": true
+  },
+  "search.exclude": {
+    "**/.angular": true,
+    "**/bin": true,
+    "**/dist": true,
+    "**/node_modules": true,
+    "**/obj": true
+  }
+}

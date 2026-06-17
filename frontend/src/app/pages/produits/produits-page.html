@@ -1,0 +1,420 @@
+<section class="produits-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Administration</p>
+      <h1>Gestion des produits</h1>
+      <p>
+        Ajout, modification et desactivation des produits et de leurs variantes.
+      </p>
+    </div>
+
+    <div class="stat-card">
+      <span>Produits actifs</span>
+      <strong>{{ produitService.nombreProduitsActifs() }}</strong>
+    </div>
+  </header>
+
+  @if (produitService.erreur()) {
+    <div class="message erreur">
+      {{ produitService.erreur() }}
+    </div>
+  }
+
+  <section class="panel">
+    <div class="panel-header">
+      <div>
+        @if (produitService.produitEnEditionId() === null) {
+          <h2>Ajouter un produit</h2>
+        } @else {
+          <h2>Modifier le produit</h2>
+        }
+
+        <p>Les champs marques d'un asterisque sont obligatoires.</p>
+      </div>
+    </div>
+
+    <form [formGroup]="formulaire" (ngSubmit)="enregistrer()">
+      <div class="form-grid">
+        <label>
+          Categorie *
+          <select formControlName="categorieId">
+            <option [ngValue]="0">
+              Selectionner une categorie
+            </option>
+
+            @for (
+              categorie of categorieService.categories();
+              track categorie.id
+            ) {
+              @if (categorie.actif) {
+                <option [ngValue]="categorie.id">
+                  {{ categorie.nom }}
+                </option>
+              }
+            }
+          </select>
+
+          @if (
+            formulaire.controls.categorieId.touched &&
+            formulaire.controls.categorieId.invalid
+          ) {
+            <small class="validation">
+              Selectionne une categorie.
+            </small>
+          }
+        </label>
+
+        <label>
+          Nom *
+          <input
+            type="text"
+            formControlName="nom"
+            maxlength="100"
+            placeholder="Exemple : Margherita"
+          />
+
+          @if (
+            formulaire.controls.nom.touched &&
+            formulaire.controls.nom.invalid
+          ) {
+            <small class="validation">
+              Le nom est obligatoire.
+            </small>
+          }
+        </label>
+
+        <label class="full-width">
+          Description
+          <textarea
+            formControlName="description"
+            rows="3"
+            placeholder="Description du produit"
+          ></textarea>
+        </label>
+
+        <label>
+          Prix de base *
+          <input
+            type="number"
+            formControlName="prixBase"
+            min="0"
+            step="0.01"
+          />
+        </label>
+
+        <label>
+          Prix promotionnel
+          <input
+            type="number"
+            formControlName="prixPromotion"
+            min="0"
+            step="0.01"
+          />
+        </label>
+
+        <label class="full-width">
+          URL de l'image
+          <input
+            type="url"
+            formControlName="imageUrl"
+            placeholder="https://..."
+          />
+        </label>
+
+        <label>
+          Ordre d'affichage *
+          <input
+            type="number"
+            formControlName="ordreAffichage"
+            min="0"
+            step="1"
+          />
+        </label>
+
+        <div class="checkboxes">
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              formControlName="permetSupplement"
+            />
+            Autoriser les supplements
+          </label>
+
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              formControlName="populaire"
+            />
+            Produit populaire
+          </label>
+
+          @if (produitService.produitEnEditionId() !== null) {
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                formControlName="actif"
+              />
+              Produit actif
+            </label>
+          }
+        </div>
+      </div>
+
+      <section
+        class="variantes-section"
+        formArrayName="variantes"
+      >
+        <div class="section-title">
+          <div>
+            <h3>Variantes</h3>
+            <p>
+              Exemple : petite, moyenne, grande ou format individuel.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            class="button secondaire"
+            (click)="ajouterVariante()"
+          >
+            Ajouter une variante
+          </button>
+        </div>
+
+        @if (variantes.length === 0) {
+          <p class="empty-message">
+            Ce produit ne possede aucune variante.
+          </p>
+        } @else {
+          <div class="variantes-list">
+            @for (
+              variante of variantes.controls;
+              track $index;
+              let index = $index
+            ) {
+              <div
+                class="variante-row"
+                [formGroupName]="index"
+              >
+                <label>
+                  Nom *
+                  <input
+                    type="text"
+                    formControlName="nom"
+                    maxlength="100"
+                    placeholder="Exemple : GRANDE"
+                  />
+                </label>
+
+                <label>
+                  Prix *
+                  <input
+                    type="number"
+                    formControlName="prix"
+                    min="0"
+                    step="0.01"
+                  />
+                </label>
+
+                <label>
+                  Ordre
+                  <input
+                    type="number"
+                    formControlName="ordreAffichage"
+                    min="0"
+                    step="1"
+                  />
+                </label>
+
+                <label class="checkbox-label">
+                  <input
+                    type="checkbox"
+                    formControlName="actif"
+                  />
+                  Active
+                </label>
+
+                <button
+                  type="button"
+                  class="button danger"
+                  (click)="supprimerVariante(index)"
+                >
+                  Retirer
+                </button>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <div class="form-actions">
+        <button
+          type="submit"
+          class="button primaire"
+          [disabled]="produitService.chargement()"
+        >
+          @if (produitService.chargement()) {
+            Enregistrement...
+          } @else if (
+            produitService.produitEnEditionId() === null
+          ) {
+            Ajouter
+          } @else {
+            Enregistrer les modifications
+          }
+        </button>
+
+        @if (produitService.produitEnEditionId() !== null) {
+          <button
+            type="button"
+            class="button secondaire"
+            (click)="annulerEdition()"
+          >
+            Annuler
+          </button>
+        }
+      </div>
+    </form>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <div>
+        <h2>Liste des produits</h2>
+        <p>
+          {{ produitService.produits().length }} produit(s)
+        </p>
+      </div>
+    </div>
+
+    @if (produitService.chargement()) {
+      <p class="empty-message">
+        Chargement des produits...
+      </p>
+    } @else if (produitService.produits().length === 0) {
+      <p class="empty-message">
+        Aucun produit trouve.
+      </p>
+    } @else {
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Produit</th>
+              <th>Categorie</th>
+              <th>Prix</th>
+              <th>Variantes</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (
+              produit of produitService.produits();
+              track produit.id
+            ) {
+              <tr [class.inactive-row]="!produit.actif">
+                <td>
+                  <strong>{{ produit.nom }}</strong>
+
+                  @if (produit.description) {
+                    <small>{{ produit.description }}</small>
+                  }
+
+                  <div class="badges">
+                    @if (produit.populaire) {
+                      <span class="badge populaire">
+                        Populaire
+                      </span>
+                    }
+
+                    @if (produit.permetSupplement) {
+                      <span class="badge supplement">
+                        Supplements
+                      </span>
+                    }
+                  </div>
+                </td>
+
+                <td>{{ produit.categorieNom }}</td>
+
+                <td>
+                  @if (produit.prixPromotion !== null) {
+                    <span class="ancien-prix">
+                      {{ produit.prixBase.toFixed(2) }} EUR
+                    </span>
+
+                    <strong class="prix-promotion">
+                      {{ produit.prixPromotion.toFixed(2) }} EUR
+                    </strong>
+                  } @else {
+                    <strong>
+                      {{ produit.prixBase.toFixed(2) }} EUR
+                    </strong>
+                  }
+                </td>
+
+                <td>
+                  @if (produit.variantes.length === 0) {
+                    <span>Aucune</span>
+                  } @else {
+                    <ul class="variantes-resume">
+                      @for (
+                        variante of produit.variantes;
+                        track variante.id
+                      ) {
+                        <li>
+                          {{ variante.nom }} :
+                          {{ variante.prix.toFixed(2) }} EUR
+                        </li>
+                      }
+                    </ul>
+                  }
+                </td>
+
+                <td>
+                  @switch (produit.actif) {
+                    @case (true) {
+                      <span class="badge actif">
+                        Actif
+                      </span>
+                    }
+
+                    @case (false) {
+                      <span class="badge inactif">
+                        Inactif
+                      </span>
+                    }
+                  }
+                </td>
+
+                <td>
+                  <div class="actions">
+                    <button
+                      type="button"
+                      class="button modifier"
+                      (click)="modifier(produit)"
+                    >
+                      Modifier
+                    </button>
+
+                    @if (produit.actif) {
+                      <button
+                        type="button"
+                        class="button danger"
+                        (click)="desactiver(produit)"
+                      >
+                        Desactiver
+                      </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+</section>
