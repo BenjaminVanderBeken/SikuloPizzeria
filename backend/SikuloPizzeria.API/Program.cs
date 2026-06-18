@@ -14,6 +14,10 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<ICommandeRepository, CommandeRepository>();
 builder.Services.AddScoped<ICommandeService, CommandeService>();
+builder.Services.AddScoped<ICompositionProduitRepository, CompositionProduitRepository>();
+builder.Services.AddScoped<ICompositionProduitService, CompositionProduitService>();
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 
 

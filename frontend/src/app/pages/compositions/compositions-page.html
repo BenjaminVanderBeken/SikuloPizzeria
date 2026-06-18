@@ -1,0 +1,166 @@
+<section class="compositions-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Administration</p>
+      <h1>Composition des produits</h1>
+      <p>Associez les ingrédients nécessaires à chaque produit.</p>
+    </div>
+
+```
+<div class="stats">
+  <div class="stat-card">
+    <span>Compositions</span>
+    <strong>{{ compositionService.nombreCompositions() }}</strong>
+  </div>
+</div>
+```
+
+  </header>
+
+@if (compositionService.erreur()) { <div class="message erreur">
+{{ compositionService.erreur() }} </div>
+}
+
+  <section class="panel">
+    <div class="panel-header">
+      <div>
+        <h2>Ajouter un ingrédient à un produit</h2>
+        <p>Chaque ligne relie un produit à un ingrédient avec une quantité.</p>
+      </div>
+    </div>
+
+```
+<form [formGroup]="formulaire" (ngSubmit)="enregistrer()">
+  <div class="form-grid">
+    <label>
+      Produit *
+      <select formControlName="produitId">
+        <option [ngValue]="0">Sélectionner un produit</option>
+
+        @for (produit of produitService.produitsActifs(); track produit.id) {
+          <option [ngValue]="produit.id">
+            {{ produit.nom }}
+          </option>
+        }
+      </select>
+    </label>
+
+    <label>
+      Ingrédient *
+      <select formControlName="ingredientId">
+        <option [ngValue]="0">Sélectionner un ingrédient</option>
+
+        @for (ingredient of ingredientService.ingredientsActifs(); track ingredient.id) {
+          <option [ngValue]="ingredient.id">
+            {{ ingredient.nom }}
+          </option>
+        }
+      </select>
+    </label>
+
+    <label>
+      Quantité *
+      <input
+        type="number"
+        formControlName="quantite"
+        min="0.01"
+        step="0.01"
+      />
+    </label>
+
+    <label>
+      Unité *
+      <input
+        type="text"
+        formControlName="unite"
+        placeholder="g, ml, portion"
+      />
+    </label>
+
+    <label>
+      Ordre d'affichage *
+      <input
+        type="number"
+        formControlName="ordreAffichage"
+        min="0"
+        step="1"
+      />
+    </label>
+  </div>
+
+  <div class="form-actions">
+    <button
+      type="submit"
+      class="button primaire"
+      [disabled]="compositionService.chargement()"
+    >
+      @if (compositionService.chargement()) {
+        Enregistrement...
+      } @else {
+        Ajouter à la composition
+      }
+    </button>
+  </div>
+</form>
+```
+
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <div>
+        <h2>Compositions existantes</h2>
+        <p>{{ compositionService.compositions().length }} ligne(s)</p>
+      </div>
+    </div>
+
+```
+@if (compositionService.chargement()) {
+  <p class="empty-message">Chargement des compositions...</p>
+} @else if (compositionService.compositions().length === 0) {
+  <p class="empty-message">Aucune composition disponible.</p>
+} @else {
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Produit</th>
+          <th>Ingrédient</th>
+          <th>Quantité</th>
+          <th>Ordre</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (
+          composition of compositionService.compositions();
+          track composition.id
+        ) {
+          <tr>
+            <td>{{ composition.produitNom }}</td>
+            <td>{{ composition.ingredientNom }}</td>
+            <td>
+              {{ composition.quantite }}
+              {{ composition.unite }}
+            </td>
+            <td>{{ composition.ordreAffichage }}</td>
+            <td>
+              <button
+                type="button"
+                class="button danger"
+                (click)="supprimer(composition.id)"
+              >
+                Retirer
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+```
+
+  </section>
+</section>

@@ -70,7 +70,10 @@
 
     <label>
       Livraison prévue
-      <input type="datetime-local" formControlName="dateLivraisonPrevue" />
+      <input
+        type="datetime-local"
+        formControlName="dateLivraisonPrevue"
+      />
     </label>
 
     <label class="full-width">
@@ -137,7 +140,8 @@
                 track produit.id
               ) {
                 <option [ngValue]="produit.id">
-                  {{ produit.nom }} - {{ produit.prixBase.toFixed(2) }} EUR
+                  {{ produit.nom }} -
+                  {{ produit.prixBase.toFixed(2) }} EUR
                 </option>
               }
             </select>
@@ -153,7 +157,8 @@
                 track variante.id
               ) {
                 <option [ngValue]="variante.id">
-                  {{ variante.nom }} - {{ variante.prix.toFixed(2) }} EUR
+                  {{ variante.nom }} -
+                  {{ variante.prix.toFixed(2) }} EUR
                 </option>
               }
             </select>
@@ -282,10 +287,28 @@
           </label>
         </div>
 
+        @if (commande.statut !== 'ANNULEE') {
+          <div class="commande-actions">
+            <button
+              type="button"
+              class="button danger"
+              (click)="annulerCommande(commande)"
+            >
+              Annuler la commande
+            </button>
+          </div>
+        }
+
         <div class="totaux">
-          <span>Sous-total : {{ commande.sousTotal.toFixed(2) }} EUR</span>
-          <span>TVA : {{ commande.tvaMontant.toFixed(2) }} EUR</span>
-          <span>Livraison : {{ commande.fraisLivraison.toFixed(2) }} EUR</span>
+          <span>
+            Sous-total : {{ commande.sousTotal.toFixed(2) }} EUR
+          </span>
+          <span>
+            TVA : {{ commande.tvaMontant.toFixed(2) }} EUR
+          </span>
+          <span>
+            Livraison : {{ commande.fraisLivraison.toFixed(2) }} EUR
+          </span>
         </div>
 
         <div class="details-commande">
@@ -294,7 +317,9 @@
           <ul>
             @for (detail of commande.details; track detail.id) {
               <li>
-                <strong>{{ detail.quantite }} × {{ detail.produitNom }}</strong>
+                <strong>
+                  {{ detail.quantite }} × {{ detail.produitNom }}
+                </strong>
 
                 @if (detail.nomVariante) {
                   <span> - {{ detail.nomVariante }}</span>
@@ -319,11 +344,17 @@
         ) {
           <div class="notes">
             @if (commande.notesClient) {
-              <p><strong>Client :</strong> {{ commande.notesClient }}</p>
+              <p>
+                <strong>Client :</strong>
+                {{ commande.notesClient }}
+              </p>
             }
 
             @if (commande.notesCuisine) {
-              <p><strong>Cuisine :</strong> {{ commande.notesCuisine }}</p>
+              <p>
+                <strong>Cuisine :</strong>
+                {{ commande.notesCuisine }}
+              </p>
             }
 
             @if (commande.demandesSpeciales) {

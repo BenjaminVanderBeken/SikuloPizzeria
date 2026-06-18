@@ -24,6 +24,11 @@ Task<bool> UpdatePaymentAsync(
 
 Task<bool> ExistsByNumberAsync(string numeroCommande);
 
+Task<bool> UpdateAsync(
+    Commande commande,
+    IReadOnlyCollection<DetailCommande> details
+);
+
 
 }
 //La méthode CreateAsync ouvrira une transaction MySQL, enregistrera d’abord la commande, puis toutes ses lignes dans details_commandes. En cas d’erreur, elle exécutera un Rollback.

@@ -266,6 +266,29 @@ this.commandeService
 
 
 }
+annulerCommande(commande: Commande): void {
+if (commande.statut === 'ANNULEE') {
+return;
+}
+
+const confirmation = window.confirm(
+`Voulez-vous vraiment annuler la commande ${commande.numeroCommande} ?`,
+);
+
+if (!confirmation) {
+return;
+}
+
+this.commandeService.effacerErreur();
+
+this.commandeService
+.modifierStatut(commande.id, {
+statut: 'ANNULEE',
+})
+.subscribe({
+error: () => undefined,
+});
+}
 
 private reinitialiserFormulaire(): void {
 this.details.clear();

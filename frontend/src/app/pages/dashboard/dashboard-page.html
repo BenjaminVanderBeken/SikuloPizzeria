@@ -1,0 +1,57 @@
+<section class="dashboard-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Accueil</p>
+      <h1>Tableau de bord</h1>
+      <p>Vue rapide de l'activité de Sikulo Pizzeria.</p>
+    </div>
+  </header>
+
+@if (dashboardService.erreur()) { <div class="message erreur">
+{{ dashboardService.erreur() }} </div>
+}
+
+@if (dashboardService.chargement()) { <section class="panel"> <p class="empty-message">Chargement des statistiques...</p> </section>
+} @else if (dashboardService.stats()) { <section class="stats-grid"> <article class="stat-card"> <span>Produits actifs</span> <strong>{{ dashboardService.stats()!.produitsActifs }}</strong> </article>
+
+```
+  <article class="stat-card">
+    <span>Clients actifs</span>
+    <strong>{{ dashboardService.stats()!.clientsActifs }}</strong>
+  </article>
+
+  <article class="stat-card">
+    <span>Commandes totales</span>
+    <strong>{{ dashboardService.stats()!.commandesTotales }}</strong>
+  </article>
+
+  <article class="stat-card">
+    <span>Commandes du jour</span>
+    <strong>{{ dashboardService.stats()!.commandesDuJour }}</strong>
+  </article>
+
+  <article class="stat-card">
+    <span>Commandes en attente</span>
+    <strong>{{ dashboardService.stats()!.commandesEnAttente }}</strong>
+  </article>
+
+  <article class="stat-card">
+    <span>Chiffre d'affaires payé</span>
+    <strong>{{ dashboardService.chiffreAffairesFormate() }}</strong>
+  </article>
+
+  <article class="stat-card">
+    <span>Ingrédients actifs</span>
+    <strong>{{ dashboardService.stats()!.ingredientsActifs }}</strong>
+  </article>
+
+  <article class="stat-card">
+    <span>Compositions</span>
+    <strong>{{ dashboardService.stats()!.compositions }}</strong>
+  </article>
+</section>
+```
+
+}
+
+</section>
