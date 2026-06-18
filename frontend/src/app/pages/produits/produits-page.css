@@ -350,3 +350,11 @@ align-items: stretch;
 flex-direction: column;
 }
 }
+.supprimer-definitif {
+background-color: #7f1d1d;
+color: white;
+}
+
+.supprimer-definitif:hover {
+background-color: #991b1b;
+}

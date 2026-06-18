@@ -96,4 +96,32 @@ public sealed class CategorieService : ICategorieService
             ? null
             : valeur.Trim();
     }
+    public Task<bool> ReactivateAsync(int id)
+{
+return _categorieRepository.ReactivateAsync(id);
+}
+
+public async Task<bool> DeletePermanentlyAsync(int id)
+{
+Categorie? categorie = await _categorieRepository.GetByIdAsync(id);
+
+
+if (categorie is null)
+{
+    return false;
+}
+
+bool contientProduits = await _categorieRepository.HasProductsAsync(id);
+
+if (contientProduits)
+{
+    throw new BusinessRuleException(
+        "Cette categorie ne peut pas etre supprimee car elle contient des produits."
+    );
+}
+
+return await _categorieRepository.DeletePermanentlyAsync(id);
+
+
+}
 }

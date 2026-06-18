@@ -1,0 +1,344 @@
+<section class="commandes-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Administration</p>
+      <h1>Gestion des commandes</h1>
+      <p>Créez une commande, suivez sa préparation et gérez son paiement.</p>
+    </div>
+
+```
+<div class="stats">
+  <div class="stat-card">
+    <span>Commandes</span>
+    <strong>{{ commandeService.nombreCommandes() }}</strong>
+  </div>
+
+  <div class="stat-card">
+    <span>Chiffre d'affaires payé</span>
+    <strong>{{ commandeService.chiffreAffaires().toFixed(2) }} EUR</strong>
+  </div>
+</div>
+```
+
+  </header>
+
+@if (commandeService.erreur()) { <div class="message erreur">
+{{ commandeService.erreur() }} </div>
+}
+
+  <section class="panel">
+    <div class="panel-header">
+      <div>
+        <h2>Créer une commande</h2>
+        <p>Les prix et le montant total sont calculés par le backend.</p>
+      </div>
+    </div>
+
+```
+<form [formGroup]="formulaire" (ngSubmit)="enregistrer()">
+  <div class="form-grid">
+    <label>
+      Client
+      <select formControlName="clientId">
+        <option [ngValue]="null">Vente comptoir</option>
+
+        @for (client of clientService.clientsActifs(); track client.id) {
+          <option [ngValue]="client.id">
+            {{ client.nom }} {{ client.prenom ?? '' }}
+          </option>
+        }
+      </select>
+    </label>
+
+    <label>
+      Type de commande *
+      <select formControlName="typeCommande">
+        @for (type of typesCommande; track type) {
+          <option [value]="type">{{ type }}</option>
+        }
+      </select>
+    </label>
+
+    <label>
+      Mode de paiement *
+      <select formControlName="modePaiement">
+        @for (mode of modesPaiement; track mode) {
+          <option [value]="mode">{{ mode }}</option>
+        }
+      </select>
+    </label>
+
+    <label>
+      Livraison prévue
+      <input type="datetime-local" formControlName="dateLivraisonPrevue" />
+    </label>
+
+    <label class="full-width">
+      Notes client
+      <textarea
+        formControlName="notesClient"
+        rows="2"
+        placeholder="Informations communiquées par le client"
+      ></textarea>
+    </label>
+
+    <label class="full-width">
+      Notes cuisine
+      <textarea
+        formControlName="notesCuisine"
+        rows="2"
+        placeholder="Instructions pour la cuisine"
+      ></textarea>
+    </label>
+
+    <label class="full-width">
+      Demandes spéciales
+      <textarea
+        formControlName="demandesSpeciales"
+        rows="2"
+        placeholder="Allergies, découpe, emballage ou autre demande"
+      ></textarea>
+    </label>
+  </div>
+
+  <section class="details-section" formArrayName="details">
+    <div class="section-title">
+      <div>
+        <h3>Produits commandés</h3>
+        <p>Ajoutez une ou plusieurs lignes à la commande.</p>
+      </div>
+
+      <button
+        type="button"
+        class="button secondaire"
+        (click)="ajouterLigne()"
+      >
+        Ajouter une ligne
+      </button>
+    </div>
+
+    <div class="details-list">
+      @for (
+        ligne of details.controls;
+        track $index;
+        let index = $index
+      ) {
+        <div class="detail-row" [formGroupName]="index">
+          <label>
+            Produit *
+            <select
+              formControlName="produitId"
+              (change)="changerProduit(index)"
+            >
+              <option [ngValue]="0">Sélectionner un produit</option>
+
+              @for (
+                produit of produitService.produitsActifs();
+                track produit.id
+              ) {
+                <option [ngValue]="produit.id">
+                  {{ produit.nom }} - {{ produit.prixBase.toFixed(2) }} EUR
+                </option>
+              }
+            </select>
+          </label>
+
+          <label>
+            Variante
+            <select formControlName="varianteId">
+              <option [ngValue]="null">Prix de base</option>
+
+              @for (
+                variante of variantesDisponibles(index);
+                track variante.id
+              ) {
+                <option [ngValue]="variante.id">
+                  {{ variante.nom }} - {{ variante.prix.toFixed(2) }} EUR
+                </option>
+              }
+            </select>
+          </label>
+
+          <label>
+            Quantité *
+            <input
+              type="number"
+              formControlName="quantite"
+              min="1"
+              step="1"
+            />
+          </label>
+
+          <label>
+            Note
+            <input
+              type="text"
+              formControlName="notesParticulieres"
+              placeholder="Sans oignons"
+            />
+          </label>
+
+          <button
+            type="button"
+            class="button danger"
+            [disabled]="details.length === 1"
+            (click)="supprimerLigne(index)"
+          >
+            Retirer
+          </button>
+        </div>
+      }
+    </div>
+  </section>
+
+  <div class="form-actions">
+    <button
+      type="submit"
+      class="button primaire"
+      [disabled]="commandeService.chargement()"
+    >
+      @if (commandeService.chargement()) {
+        Enregistrement...
+      } @else {
+        Créer la commande
+      }
+    </button>
+  </div>
+</form>
+```
+
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <div>
+        <h2>Commandes existantes</h2>
+        <p>{{ commandeService.commandes().length }} commande(s)</p>
+      </div>
+    </div>
+
+```
+@if (commandeService.chargement()) {
+  <p class="empty-message">Chargement des commandes...</p>
+} @else if (commandeService.commandes().length === 0) {
+  <p class="empty-message">Aucune commande disponible.</p>
+} @else {
+  <div class="commandes-list">
+    @for (
+      commande of commandeService.commandes();
+      track commande.id
+    ) {
+      <article class="commande-card">
+        <header class="commande-header">
+          <div>
+            <h3>{{ commande.numeroCommande }}</h3>
+            <p>
+              {{ commande.clientNomComplet }} ·
+              {{ commande.typeCommande }}
+            </p>
+            <small>{{ commande.dateCommande }}</small>
+          </div>
+
+          <strong class="montant">
+            {{ commande.montantTotal.toFixed(2) }} EUR
+          </strong>
+        </header>
+
+        <div class="commande-grid">
+          <label>
+            Statut
+            <select
+              [value]="commande.statut"
+              (change)="changerStatut(commande, $event)"
+            >
+              @for (statut of statutsCommande; track statut) {
+                <option [value]="statut">{{ statut }}</option>
+              }
+            </select>
+          </label>
+
+          <label>
+            Mode de paiement
+            <select
+              [value]="commande.modePaiement"
+              (change)="changerModePaiement(commande, $event)"
+            >
+              @for (mode of modesPaiement; track mode) {
+                <option [value]="mode">{{ mode }}</option>
+              }
+            </select>
+          </label>
+
+          <label>
+            Statut du paiement
+            <select
+              [value]="commande.statutPaiement"
+              (change)="changerStatutPaiement(commande, $event)"
+            >
+              @for (statut of statutsPaiement; track statut) {
+                <option [value]="statut">{{ statut }}</option>
+              }
+            </select>
+          </label>
+        </div>
+
+        <div class="totaux">
+          <span>Sous-total : {{ commande.sousTotal.toFixed(2) }} EUR</span>
+          <span>TVA : {{ commande.tvaMontant.toFixed(2) }} EUR</span>
+          <span>Livraison : {{ commande.fraisLivraison.toFixed(2) }} EUR</span>
+        </div>
+
+        <div class="details-commande">
+          <h4>Détails</h4>
+
+          <ul>
+            @for (detail of commande.details; track detail.id) {
+              <li>
+                <strong>{{ detail.quantite }} × {{ detail.produitNom }}</strong>
+
+                @if (detail.nomVariante) {
+                  <span> - {{ detail.nomVariante }}</span>
+                }
+
+                <span>
+                  : {{ detail.prixTotal.toFixed(2) }} EUR
+                </span>
+
+                @if (detail.notesParticulieres) {
+                  <small>{{ detail.notesParticulieres }}</small>
+                }
+              </li>
+            }
+          </ul>
+        </div>
+
+        @if (
+          commande.notesClient ||
+          commande.notesCuisine ||
+          commande.demandesSpeciales
+        ) {
+          <div class="notes">
+            @if (commande.notesClient) {
+              <p><strong>Client :</strong> {{ commande.notesClient }}</p>
+            }
+
+            @if (commande.notesCuisine) {
+              <p><strong>Cuisine :</strong> {{ commande.notesCuisine }}</p>
+            }
+
+            @if (commande.demandesSpeciales) {
+              <p>
+                <strong>Demandes spéciales :</strong>
+                {{ commande.demandesSpeciales }}
+              </p>
+            }
+          </div>
+        }
+      </article>
+    }
+  </div>
+}
+```
+
+  </section>
+</section>

@@ -107,4 +107,32 @@ export class CategoriesPage implements OnInit {
       actif: true
     });
   }
+  reactiver(categorie: Categorie): void {
+const confirmation = window.confirm(
+`Réactiver la catégorie "${categorie.nom}" ?`
+);
+
+if (!confirmation) {
+return;
+}
+
+this.categorieService.reactiver(categorie.id).subscribe({
+error: () => undefined,
+});
+}
+
+supprimerDefinitivement(categorie: Categorie): void {
+const confirmation = window.confirm(
+`Supprimer définitivement la catégorie "${categorie.nom}" ? Cette action est irréversible.`
+);
+
+if (!confirmation) {
+return;
+}
+
+this.categorieService.supprimerDefinitivement(categorie.id).subscribe({
+error: () => undefined,
+});
+}
+
 }

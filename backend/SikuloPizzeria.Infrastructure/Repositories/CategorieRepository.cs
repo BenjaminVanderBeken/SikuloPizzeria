@@ -7,139 +7,203 @@ namespace SikuloPizzeria.Infrastructure.Repositories;
 
 public sealed class CategorieRepository : ICategorieRepository
 {
-    private readonly IDbConnectionFactory _connectionFactory;
+private readonly IDbConnectionFactory _connectionFactory;
 
-    public CategorieRepository(IDbConnectionFactory connectionFactory)
-    {
-        _connectionFactory = connectionFactory;
-    }
 
-    public async Task<IEnumerable<Categorie>> GetAllAsync()
-    {
-        const string sql = """
-            SELECT
-                id AS Id,
-                nom AS Nom,
-                description AS Description,
-                ordre_affichage AS OrdreAffichage,
-                actif AS Actif
-            FROM categories
-            ORDER BY ordre_affichage, nom;
-            """;
+public CategorieRepository(IDbConnectionFactory connectionFactory)
+{
+    _connectionFactory = connectionFactory;
+}
 
-        await using var connection = _connectionFactory.CreateConnection();
-        await connection.OpenAsync();
+public async Task<IEnumerable<Categorie>> GetAllAsync()
+{
+    const string sql = """
+        SELECT
+            id AS Id,
+            nom AS Nom,
+            description AS Description,
+            ordre_affichage AS OrdreAffichage,
+            actif AS Actif
+        FROM categories
+        ORDER BY ordre_affichage, nom;
+        """;
 
-        return await connection.QueryAsync<Categorie>(sql);
-    }
+    await using var connection = _connectionFactory.CreateConnection();
+    await connection.OpenAsync();
 
-    public async Task<Categorie?> GetByIdAsync(int id)
-    {
-        const string sql = """
-            SELECT
-                id AS Id,
-                nom AS Nom,
-                description AS Description,
-                ordre_affichage AS OrdreAffichage,
-                actif AS Actif
-            FROM categories
-            WHERE id = @Id;
-            """;
+    return await connection.QueryAsync<Categorie>(sql);
+}
 
-        await using var connection = _connectionFactory.CreateConnection();
-        await connection.OpenAsync();
+public async Task<Categorie?> GetByIdAsync(int id)
+{
+    const string sql = """
+        SELECT
+            id AS Id,
+            nom AS Nom,
+            description AS Description,
+            ordre_affichage AS OrdreAffichage,
+            actif AS Actif
+        FROM categories
+        WHERE id = @Id;
+        """;
 
-        return await connection.QuerySingleOrDefaultAsync<Categorie>(
-            sql,
-            new { Id = id });
-    }
+    await using var connection = _connectionFactory.CreateConnection();
+    await connection.OpenAsync();
 
-    public async Task<int> CreateAsync(Categorie categorie)
-    {
-        const string sql = """
-            INSERT INTO categories (
-                nom,
-                description,
-                ordre_affichage,
-                actif
-            )
-            VALUES (
-                @Nom,
-                @Description,
-                @OrdreAffichage,
-                @Actif
-            );
+    return await connection.QuerySingleOrDefaultAsync<Categorie>(
+        sql,
+        new { Id = id }
+    );
+}
 
-            SELECT LAST_INSERT_ID();
-            """;
+public async Task<int> CreateAsync(Categorie categorie)
+{
+    const string sql = """
+        INSERT INTO categories (
+            nom,
+            description,
+            ordre_affichage,
+            actif
+        )
+        VALUES (
+            @Nom,
+            @Description,
+            @OrdreAffichage,
+            @Actif
+        );
 
-        await using var connection = _connectionFactory.CreateConnection();
-        await connection.OpenAsync();
+        SELECT LAST_INSERT_ID();
+        """;
 
-        return await connection.ExecuteScalarAsync<int>(sql, categorie);
-    }
+    await using var connection = _connectionFactory.CreateConnection();
+    await connection.OpenAsync();
 
-    public async Task<bool> UpdateAsync(Categorie categorie)
-    {
-        const string sql = """
-            UPDATE categories
-            SET
-                nom = @Nom,
-                description = @Description,
-                ordre_affichage = @OrdreAffichage,
-                actif = @Actif
-            WHERE id = @Id;
-            """;
+    return await connection.ExecuteScalarAsync<int>(sql, categorie);
+}
 
-        await using var connection = _connectionFactory.CreateConnection();
-        await connection.OpenAsync();
+public async Task<bool> UpdateAsync(Categorie categorie)
+{
+    const string sql = """
+        UPDATE categories
+        SET
+            nom = @Nom,
+            description = @Description,
+            ordre_affichage = @OrdreAffichage,
+            actif = @Actif
+        WHERE id = @Id;
+        """;
 
-        int affectedRows = await connection.ExecuteAsync(sql, categorie);
+    await using var connection = _connectionFactory.CreateConnection();
+    await connection.OpenAsync();
 
-        return affectedRows > 0;
-    }
+    int affectedRows = await connection.ExecuteAsync(sql, categorie);
 
-    public async Task<bool> DeleteAsync(int id)
-    {
-        const string sql = """
-            UPDATE categories
-            SET actif = FALSE
-            WHERE id = @Id
-              AND actif = TRUE;
-            """;
+    return affectedRows > 0;
+}
 
-        await using var connection = _connectionFactory.CreateConnection();
-        await connection.OpenAsync();
+public async Task<bool> DeleteAsync(int id)
+{
+    const string sql = """
+        UPDATE categories
+        SET actif = FALSE
+        WHERE id = @Id
+          AND actif = TRUE;
+        """;
 
-        int affectedRows = await connection.ExecuteAsync(
-            sql,
-            new { Id = id });
+    await using var connection = _connectionFactory.CreateConnection();
+    await connection.OpenAsync();
 
-        return affectedRows > 0;
-    }
+    int affectedRows = await connection.ExecuteAsync(
+        sql,
+        new { Id = id }
+    );
 
-    public async Task<bool> ExistsByNameAsync(
-        string nom,
-        int? excludedId = null)
-    {
-        const string sql = """
-            SELECT COUNT(*)
-            FROM categories
-            WHERE LOWER(nom) = LOWER(@Nom)
-              AND (@ExcludedId IS NULL OR id <> @ExcludedId);
-            """;
+    return affectedRows > 0;
+}
 
-        await using var connection = _connectionFactory.CreateConnection();
-        await connection.OpenAsync();
+public async Task<bool> ReactivateAsync(int id)
+{
+    const string sql = """
+        UPDATE categories
+        SET actif = TRUE
+        WHERE id = @Id
+          AND actif = FALSE;
+        """;
 
-        int count = await connection.ExecuteScalarAsync<int>(
-            sql,
-            new
-            {
-                Nom = nom,
-                ExcludedId = excludedId
-            });
+    await using var connection = _connectionFactory.CreateConnection();
+    await connection.OpenAsync();
 
-        return count > 0;
-    }
+    int affectedRows = await connection.ExecuteAsync(
+        sql,
+        new { Id = id }
+    );
+
+    return affectedRows > 0;
+}
+
+public async Task<bool> HasProductsAsync(int id)
+{
+    const string sql = """
+        SELECT COUNT(*)
+        FROM produits
+        WHERE categorie_id = @Id;
+        """;
+
+    await using var connection = _connectionFactory.CreateConnection();
+    await connection.OpenAsync();
+
+    int productCount = await connection.ExecuteScalarAsync<int>(
+        sql,
+        new { Id = id }
+    );
+
+    return productCount > 0;
+}
+
+public async Task<bool> DeletePermanentlyAsync(int id)
+{
+    const string sql = """
+        DELETE FROM categories
+        WHERE id = @Id;
+        """;
+
+    await using var connection = _connectionFactory.CreateConnection();
+    await connection.OpenAsync();
+
+    int affectedRows = await connection.ExecuteAsync(
+        sql,
+        new { Id = id }
+    );
+
+    return affectedRows > 0;
+}
+
+public async Task<bool> ExistsByNameAsync(
+    string nom,
+    int? excludedId = null
+)
+{
+    const string sql = """
+        SELECT COUNT(*)
+        FROM categories
+        WHERE LOWER(nom) = LOWER(@Nom)
+          AND (@ExcludedId IS NULL OR id <> @ExcludedId);
+        """;
+
+    await using var connection = _connectionFactory.CreateConnection();
+    await connection.OpenAsync();
+
+    int count = await connection.ExecuteScalarAsync<int>(
+        sql,
+        new
+        {
+            Nom = nom,
+            ExcludedId = excludedId
+        }
+    );
+
+    return count > 0;
+}
+
+
 }

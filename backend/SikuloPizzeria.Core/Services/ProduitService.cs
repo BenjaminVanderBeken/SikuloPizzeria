@@ -139,6 +139,11 @@ public sealed class ProduitService : IProduitService
         return _produitRepository.DisableAsync(id);
     }
 
+public Task<bool> ReactivateAsync(int id)
+{
+return _produitRepository.ReactivateAsync(id);
+}
+
     private async Task VerifierCategorieAsync(int categorieId)
     {
         Categorie? categorie =
@@ -156,6 +161,30 @@ public sealed class ProduitService : IProduitService
                 "Il est impossible d'utiliser une catégorie inactive.");
         }
     }
+public async Task<bool> DeleteAsync(int id)
+{
+ProduitDto? produit =
+await _produitRepository.GetByIdAsync(id);
+
+
+if (produit is null)
+{
+    return false;
+}
+
+bool utiliseDansCommande =
+    await _produitRepository.IsUsedInOrderAsync(id);
+
+if (utiliseDansCommande)
+{
+    throw new BusinessRuleException(
+        "Ce produit ne peut pas etre supprime car il est utilise dans une commande.");
+}
+
+return await _produitRepository.DeleteAsync(id);
+
+
+}
 
     private static void VerifierPrix(
         decimal prixBase,

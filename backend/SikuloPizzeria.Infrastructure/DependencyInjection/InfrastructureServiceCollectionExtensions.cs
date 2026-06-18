@@ -26,6 +26,7 @@ public static class InfrastructureServiceCollectionExtensions
 
         services.AddScoped<IProduitRepository, ProduitRepository>();
         services.AddScoped<ICategorieRepository, CategorieRepository>();
+        services.AddScoped<IIngredientRepository, IngredientRepository>();
 
         return services;
     }

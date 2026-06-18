@@ -1,0 +1,375 @@
+<section class="clients-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Administration</p>
+      <h1>Gestion des clients</h1>
+      <p>
+        Ajout, modification, désactivation, réactivation et suppression des clients.
+      </p>
+    </div>
+
+```
+<div class="stat-card">
+  <span>Clients actifs</span>
+  <strong>{{ clientService.nombreClientsActifs() }}</strong>
+</div>
+```
+
+  </header>
+
+@if (clientService.erreur()) { <div class="message erreur">
+{{ clientService.erreur() }} </div>
+}
+
+  <section class="panel">
+    <div class="panel-header">
+      <div>
+        @if (clientService.clientEnEditionId() === null) {
+          <h2>Ajouter un client</h2>
+        } @else {
+          <h2>Modifier un client</h2>
+        }
+
+```
+    <p>Les champs marqués d'un astérisque sont obligatoires.</p>
+  </div>
+</div>
+
+<form [formGroup]="formulaire" (ngSubmit)="enregistrer()">
+  <div class="form-grid">
+    <label>
+      Nom *
+
+      <input
+        type="text"
+        formControlName="nom"
+        maxlength="100"
+        placeholder="Nom du client"
+      />
+
+      @if (
+        formulaire.controls.nom.touched &&
+        formulaire.controls.nom.invalid
+      ) {
+        <small class="validation">
+          Le nom est obligatoire.
+        </small>
+      }
+    </label>
+
+    <label>
+      Prénom
+
+      <input
+        type="text"
+        formControlName="prenom"
+        maxlength="100"
+        placeholder="Prénom du client"
+      />
+    </label>
+
+    <label>
+      Adresse e-mail
+
+      <input
+        type="email"
+        formControlName="email"
+        maxlength="150"
+        placeholder="client@email.be"
+      />
+
+      @if (
+        formulaire.controls.email.touched &&
+        formulaire.controls.email.invalid
+      ) {
+        <small class="validation">
+          L'adresse e-mail n'est pas valide.
+        </small>
+      }
+    </label>
+
+    <label>
+      Téléphone
+
+      <input
+        type="tel"
+        formControlName="telephone"
+        maxlength="25"
+        placeholder="0470 00 00 00"
+      />
+    </label>
+
+    <label class="full-width">
+      Rue
+
+      <input
+        type="text"
+        formControlName="adresseRue"
+        maxlength="200"
+        placeholder="Nom de la rue"
+      />
+    </label>
+
+    <label>
+      Numéro
+
+      <input
+        type="text"
+        formControlName="adresseNumero"
+        maxlength="20"
+        placeholder="12"
+      />
+    </label>
+
+    <label>
+      Boîte
+
+      <input
+        type="text"
+        formControlName="adresseBoite"
+        maxlength="10"
+        placeholder="B3"
+      />
+    </label>
+
+    <label>
+      Code postal
+
+      <input
+        type="text"
+        formControlName="adresseCodePostal"
+        maxlength="10"
+        placeholder="1000"
+      />
+    </label>
+
+    <label>
+      Ville
+
+      <input
+        type="text"
+        formControlName="adresseVille"
+        maxlength="100"
+        placeholder="Bruxelles"
+      />
+    </label>
+
+    <label>
+      Pays *
+
+      <input
+        type="text"
+        formControlName="adressePays"
+        maxlength="50"
+      />
+    </label>
+
+    <label class="full-width">
+      Notes
+
+      <textarea
+        formControlName="notes"
+        rows="3"
+        placeholder="Informations complémentaires"
+      ></textarea>
+    </label>
+
+    <div class="checkboxes">
+      <label class="checkbox-label">
+        <input
+          type="checkbox"
+          formControlName="clientVip"
+        />
+
+        Client VIP
+      </label>
+
+      @if (clientService.clientEnEditionId() !== null) {
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            formControlName="actif"
+          />
+
+          Client actif
+        </label>
+      }
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button
+      type="submit"
+      class="button primaire"
+      [disabled]="clientService.chargement()"
+    >
+      @if (clientService.chargement()) {
+        Enregistrement...
+      } @else if (clientService.clientEnEditionId() === null) {
+        Ajouter
+      } @else {
+        Enregistrer les modifications
+      }
+    </button>
+
+    @if (clientService.clientEnEditionId() !== null) {
+      <button
+        type="button"
+        class="button secondaire"
+        (click)="annulerEdition()"
+      >
+        Annuler
+      </button>
+    }
+  </div>
+</form>
+```
+
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <div>
+        <h2>Liste des clients</h2>
+        <p>{{ clientService.clients().length }} client(s)</p>
+      </div>
+    </div>
+
+```
+@if (clientService.chargement()) {
+  <p class="empty-message">
+    Chargement des clients...
+  </p>
+} @else if (clientService.clients().length === 0) {
+  <p class="empty-message">
+    Aucun client trouvé.
+  </p>
+} @else {
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Client</th>
+          <th>Coordonnées</th>
+          <th>Adresse</th>
+          <th>VIP</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (
+          client of clientService.clients();
+          track client.id
+        ) {
+          <tr [class.inactive-row]="!client.actif">
+            <td>
+              <strong>
+                {{ client.nom }}
+                {{ client.prenom ?? '' }}
+              </strong>
+
+              @if (client.notes) {
+                <small>{{ client.notes }}</small>
+              }
+            </td>
+
+            <td>
+              @if (client.email) {
+                <div>{{ client.email }}</div>
+              }
+
+              @if (client.telephone) {
+                <div>{{ client.telephone }}</div>
+              }
+
+              @if (!client.email && !client.telephone) {
+                <span>Non renseigné</span>
+              }
+            </td>
+
+            <td>
+              @if (client.adresseRue || client.adresseVille) {
+                <div>
+                  {{ client.adresseRue ?? '' }}
+                  {{ client.adresseNumero ?? '' }}
+                  {{ client.adresseBoite ?? '' }}
+                </div>
+
+                <div>
+                  {{ client.adresseCodePostal ?? '' }}
+                  {{ client.adresseVille ?? '' }}
+                </div>
+
+                <div>
+                  {{ client.adressePays }}
+                </div>
+              } @else {
+                <span>Non renseignée</span>
+              }
+            </td>
+
+            <td>
+              @if (client.clientVip) {
+                <span class="badge vip">VIP</span>
+              } @else {
+                <span>Non</span>
+              }
+            </td>
+
+            <td>
+              @if (client.actif) {
+                <span class="badge actif">Actif</span>
+              } @else {
+                <span class="badge inactif">Inactif</span>
+              }
+            </td>
+
+            <td>
+              <div class="actions">
+                <button
+                  type="button"
+                  class="button modifier"
+                  (click)="modifier(client)"
+                >
+                  Modifier
+                </button>
+
+                @if (client.actif) {
+                  <button
+                    type="button"
+                    class="button danger"
+                    (click)="desactiver(client)"
+                  >
+                    Désactiver
+                  </button>
+                } @else {
+                  <button
+                    type="button"
+                    class="button reactiver"
+                    (click)="reactiver(client)"
+                  >
+                    Réactiver
+                  </button>
+
+                  <button
+                    type="button"
+                    class="button supprimer-definitif"
+                    (click)="supprimerDefinitivement(client)"
+                  >
+                    Supprimer définitivement
+                  </button>
+                }
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+```
+
+  </section>
+</section>

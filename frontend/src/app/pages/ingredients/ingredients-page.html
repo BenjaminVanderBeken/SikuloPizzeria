@@ -1,0 +1,332 @@
+<section class="ingredients-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Administration</p>
+      <h1>Gestion des ingrédients</h1>
+      <p>
+        Ajout, modification, désactivation, réactivation et suppression des ingrédients.
+      </p>
+    </div>
+
+```
+<div class="stat-card">
+  <span>Ingrédients actifs</span>
+  <strong>{{ ingredientService.nombreIngredientsActifs() }}</strong>
+</div>
+```
+
+  </header>
+
+@if (ingredientService.erreur()) { <div class="message erreur">
+{{ ingredientService.erreur() }} </div>
+}
+
+  <section class="panel">
+    <div class="panel-header">
+      @if (ingredientService.ingredientEnEditionId() === null) {
+        <h2>Ajouter un ingrédient</h2>
+      } @else {
+        <h2>Modifier un ingrédient</h2>
+      }
+
+```
+  <p>Les champs marqués d'un astérisque sont obligatoires.</p>
+</div>
+
+<form [formGroup]="formulaire" (ngSubmit)="enregistrer()">
+  <div class="form-grid">
+    <label>
+      Nom *
+
+      <input
+        type="text"
+        formControlName="nom"
+        maxlength="100"
+        placeholder="Exemple : Mozzarella"
+      />
+
+      @if (
+        formulaire.controls.nom.touched &&
+        formulaire.controls.nom.invalid
+      ) {
+        <small class="validation">
+          Le nom est obligatoire.
+        </small>
+      }
+    </label>
+
+    <label>
+      Type *
+
+      <select formControlName="type">
+        <option value="">
+          Sélectionner un type
+        </option>
+
+        @for (type of typesIngredient; track type) {
+          <option [value]="type">
+            {{ type }}
+          </option>
+        }
+      </select>
+
+      @if (
+        formulaire.controls.type.touched &&
+        formulaire.controls.type.invalid
+      ) {
+        <small class="validation">
+          Le type est obligatoire.
+        </small>
+      }
+    </label>
+
+    <label>
+      Stock actuel *
+
+      <input
+        type="number"
+        formControlName="stockActuel"
+        min="0"
+        step="0.01"
+      />
+    </label>
+
+    <label>
+      Unité de mesure *
+
+      <input
+        type="text"
+        formControlName="uniteMesure"
+        maxlength="30"
+        placeholder="Exemple : kg, g, litre"
+      />
+
+      @if (
+        formulaire.controls.uniteMesure.touched &&
+        formulaire.controls.uniteMesure.invalid
+      ) {
+        <small class="validation">
+          L'unité de mesure est obligatoire.
+        </small>
+      }
+    </label>
+
+    <label>
+      Prix unitaire
+
+      <input
+        type="number"
+        formControlName="prixUnitaire"
+        min="0"
+        step="0.01"
+      />
+    </label>
+
+    <label>
+      Allergènes
+
+      <input
+        type="text"
+        formControlName="allergenes"
+        maxlength="255"
+        placeholder="Exemple : lait, gluten"
+      />
+    </label>
+
+    @if (ingredientService.ingredientEnEditionId() !== null) {
+      <label class="checkbox-label">
+        <input
+          type="checkbox"
+          formControlName="actif"
+        />
+
+        Ingrédient actif
+      </label>
+    }
+  </div>
+
+  <div class="form-actions">
+    <button
+      type="submit"
+      class="button primaire"
+      [disabled]="ingredientService.chargement()"
+    >
+      @if (ingredientService.chargement()) {
+        Enregistrement...
+      } @else if (
+        ingredientService.ingredientEnEditionId() === null
+      ) {
+        Ajouter
+      } @else {
+        Enregistrer les modifications
+      }
+    </button>
+
+    @if (ingredientService.ingredientEnEditionId() !== null) {
+      <button
+        type="button"
+        class="button secondaire"
+        (click)="annulerEdition()"
+      >
+        Annuler
+      </button>
+    }
+  </div>
+</form>
+```
+
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <h2>Liste des ingrédients</h2>
+
+```
+  <p>
+    {{ ingredientService.ingredients().length }} ingrédient(s)
+  </p>
+</div>
+
+@if (ingredientService.chargement()) {
+  <p class="empty-message">
+    Chargement des ingrédients...
+  </p>
+} @else if (ingredientService.ingredients().length === 0) {
+  <p class="empty-message">
+    Aucun ingrédient trouvé.
+  </p>
+} @else {
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Type</th>
+          <th>Stock</th>
+          <th>Prix unitaire</th>
+          <th>Allergènes</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (
+          ingredient of ingredientService.ingredients();
+          track ingredient.id
+        ) {
+          <tr [class.inactive-row]="!ingredient.actif">
+            <td>
+              <strong>{{ ingredient.nom }}</strong>
+            </td>
+
+            <td>
+              @switch (ingredient.type) {
+                @case ('SAUCE') {
+                  <span class="badge sauce">Sauce</span>
+                }
+
+                @case ('VIANDE') {
+                  <span class="badge viande">Viande</span>
+                }
+
+                @case ('FROMAGE') {
+                  <span class="badge fromage">Fromage</span>
+                }
+
+                @case ('LEGUME') {
+                  <span class="badge legume">Légume</span>
+                }
+
+                @case ('ACCOMPAGNEMENT') {
+                  <span class="badge accompagnement">
+                    Accompagnement
+                  </span>
+                }
+
+                @default {
+                  <span class="badge autre">Autre</span>
+                }
+              }
+            </td>
+
+            <td>
+              {{ ingredient.stockActuel }}
+              {{ ingredient.uniteMesure }}
+            </td>
+
+            <td>
+              @if (ingredient.prixUnitaire !== null) {
+                {{ ingredient.prixUnitaire.toFixed(2) }} EUR
+              } @else {
+                Non renseigné
+              }
+            </td>
+
+            <td>
+              @if (ingredient.allergenes) {
+                {{ ingredient.allergenes }}
+              } @else {
+                Aucun
+              }
+            </td>
+
+            <td>
+              @if (ingredient.actif) {
+                <span class="badge actif">
+                  Actif
+                </span>
+              } @else {
+                <span class="badge inactif">
+                  Inactif
+                </span>
+              }
+            </td>
+
+            <td>
+              <div class="actions">
+                <button
+                  type="button"
+                  class="button modifier"
+                  (click)="modifier(ingredient)"
+                >
+                  Modifier
+                </button>
+
+                @if (ingredient.actif) {
+                  <button
+                    type="button"
+                    class="button danger"
+                    (click)="desactiver(ingredient)"
+                  >
+                    Désactiver
+                  </button>
+                } @else {
+                  <button
+                    type="button"
+                    class="button reactiver"
+                    (click)="reactiver(ingredient)"
+                  >
+                    Réactiver
+                  </button>
+
+                  <button
+                    type="button"
+                    class="button supprimer-definitif"
+                    (click)="supprimerDefinitivement(ingredient)"
+                  >
+                    Supprimer définitivement
+                  </button>
+                }
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+```
+
+  </section>
+</section>

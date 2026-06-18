@@ -2,22 +2,26 @@
   <header class="page__header">
     <h1>Gestion des catégories</h1>
 
-    <p>
-      Ajoutez, modifiez ou désactivez les catégories de la pizzeria.
-    </p>
+
+<p>
+  Ajoutez, modifiez, désactivez, réactivez ou supprimez les catégories de la pizzeria.
+</p>
+
+
   </header>
 
-  @if (categorieService.erreur(); as erreur) {
-    <div class="alerte alerte--erreur">
-      <span>{{ erreur }}</span>
+@if (categorieService.erreur(); as erreur) { <div class="alerte alerte--erreur"> <span>{{ erreur }}</span>
 
-      <button
-        type="button"
-        (click)="categorieService.effacerErreur()">
-        Fermer
-      </button>
-    </div>
-  }
+
+  <button
+    type="button"
+    (click)="categorieService.effacerErreur()">
+    Fermer
+  </button>
+</div>
+
+
+}
 
   <section class="carte">
     @if (categorieService.editionId() !== null) {
@@ -26,156 +30,176 @@
       <h2>Ajouter une catégorie</h2>
     }
 
-    <form
-      [formGroup]="formulaire"
-      (ngSubmit)="enregistrer()">
 
-      <div class="champ">
-        <label for="nom">Nom</label>
+<form
+  [formGroup]="formulaire"
+  (ngSubmit)="enregistrer()">
 
-        <input
-          id="nom"
-          type="text"
-          formControlName="nom">
+  <div class="champ">
+    <label for="nom">Nom</label>
 
-        @if (
-          formulaire.controls.nom.touched &&
-          formulaire.controls.nom.invalid
-        ) {
-          <small class="erreur-champ">
-            Le nom doit contenir entre 2 et 100 caractères.
-          </small>
-        }
-      </div>
+    <input
+      id="nom"
+      type="text"
+      formControlName="nom">
 
-      <div class="champ">
-        <label for="description">Description</label>
+    @if (
+      formulaire.controls.nom.touched &&
+      formulaire.controls.nom.invalid
+    ) {
+      <small class="erreur-champ">
+        Le nom doit contenir entre 2 et 100 caractères.
+      </small>
+    }
+  </div>
 
-        <textarea
-          id="description"
-          rows="3"
-          formControlName="description">
-        </textarea>
-      </div>
+  <div class="champ">
+    <label for="description">Description</label>
 
-      <div class="champ">
-        <label for="ordreAffichage">
-          Ordre d’affichage
-        </label>
+    <textarea
+      id="description"
+      rows="3"
+      formControlName="description">
+    </textarea>
+  </div>
 
-        <input
-          id="ordreAffichage"
-          type="number"
-          min="0"
-          formControlName="ordreAffichage">
-      </div>
+  <div class="champ">
+    <label for="ordreAffichage">
+      Ordre d’affichage
+    </label>
+
+    <input
+      id="ordreAffichage"
+      type="number"
+      min="0"
+      formControlName="ordreAffichage">
+  </div>
+
+  @if (categorieService.editionId() !== null) {
+    <label class="case">
+      <input
+        type="checkbox"
+        formControlName="actif">
+
+      Catégorie active
+    </label>
+  }
+
+  <div class="actions">
+    <button
+      type="submit"
+      [disabled]="categorieService.chargement()">
 
       @if (categorieService.editionId() !== null) {
-        <label class="case">
-          <input
-            type="checkbox"
-            formControlName="actif">
-
-          Catégorie active
-        </label>
+        Enregistrer les modifications
+      } @else {
+        Ajouter la catégorie
       }
+    </button>
 
-      <div class="actions">
-        <button
-          type="submit"
-          [disabled]="categorieService.chargement()">
+    @if (categorieService.editionId() !== null) {
+      <button
+        type="button"
+        class="secondaire"
+        (click)="annulerModification()">
+        Annuler
+      </button>
+    }
+  </div>
+</form>
 
-          @if (categorieService.editionId() !== null) {
-            Enregistrer les modifications
-          } @else {
-            Ajouter la catégorie
-          }
-        </button>
 
-        @if (categorieService.editionId() !== null) {
-          <button
-            type="button"
-            class="secondaire"
-            (click)="annulerModification()">
-            Annuler
-          </button>
-        }
-      </div>
-    </form>
   </section>
 
   <section class="carte">
     <h2>Catégories existantes</h2>
 
-    @if (categorieService.chargement()) {
-      <p>Chargement en cours...</p>
-    } @else if (categorieService.categories().length === 0) {
-      <p>Aucune catégorie disponible.</p>
-    } @else {
-      <div class="tableau-conteneur">
-        <table>
-          <thead>
-            <tr>
-              <th>Ordre</th>
-              <th>Nom</th>
-              <th>Description</th>
-              <th>État</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
 
-          <tbody>
-            @for (
-              categorie of categorieService.categories();
-              track categorie.id
-            ) {
-              <tr>
-                <td>{{ categorie.ordreAffichage }}</td>
+@if (categorieService.chargement()) {
+  <p>Chargement en cours...</p>
+} @else if (categorieService.categories().length === 0) {
+  <p>Aucune catégorie disponible.</p>
+} @else {
+  <div class="tableau-conteneur">
+    <table>
+      <thead>
+        <tr>
+          <th>Ordre</th>
+          <th>Nom</th>
+          <th>Description</th>
+          <th>État</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
 
-                <td>{{ categorie.nom }}</td>
+      <tbody>
+        @for (
+          categorie of categorieService.categories();
+          track categorie.id
+        ) {
+          <tr>
+            <td>{{ categorie.ordreAffichage }}</td>
 
-                <td>
-                  {{ categorie.description ?? '—' }}
-                </td>
+            <td>{{ categorie.nom }}</td>
 
-                <td>
-                  @switch (categorie.actif) {
-                    @case (true) {
-                      <span class="statut statut--actif">
-                        Active
-                      </span>
-                    }
+            <td>
+              {{ categorie.description ?? '—' }}
+            </td>
 
-                    @default {
-                      <span class="statut statut--inactif">
-                        Inactive
-                      </span>
-                    }
-                  }
-                </td>
+            <td>
+              @switch (categorie.actif) {
+                @case (true) {
+                  <span class="statut statut--actif">
+                    Active
+                  </span>
+                }
 
-                <td class="actions-ligne">
-                  <button
-                    type="button"
-                    class="secondaire"
-                    (click)="preparerModification(categorie)">
-                    Modifier
-                  </button>
+                @default {
+                  <span class="statut statut--inactif">
+                    Inactive
+                  </span>
+                }
+              }
+            </td>
 
-                  @if (categorie.actif) {
-                    <button
-                      type="button"
-                      class="danger"
-                      (click)="desactiver(categorie.id)">
-                      Désactiver
-                    </button>
-                  }
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    }
+            <td class="actions-ligne">
+              <button
+                type="button"
+                class="secondaire"
+                (click)="preparerModification(categorie)">
+                Modifier
+              </button>
+
+              @if (categorie.actif) {
+                <button
+                  type="button"
+                  class="danger"
+                  (click)="desactiver(categorie.id)">
+                  Désactiver
+                </button>
+              } @else {
+                <button
+                  type="button"
+                  class="reactiver"
+                  (click)="reactiver(categorie)">
+                  Réactiver
+                </button>
+
+                <button
+                  type="button"
+                  class="supprimer-definitif"
+                  (click)="supprimerDefinitivement(categorie)">
+                  Supprimer définitivement
+                </button>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+
+
   </section>
 </main>

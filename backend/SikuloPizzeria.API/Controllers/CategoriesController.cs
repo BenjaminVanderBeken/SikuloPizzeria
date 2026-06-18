@@ -10,34 +10,77 @@ namespace SikuloPizzeria.API.Controllers;
 [Route("api/categories")]
 public sealed class CategoriesController : ControllerBase
 {
-    private readonly ICategorieService _categorieService;
+private readonly ICategorieService _categorieService;
 
-    public CategoriesController(ICategorieService categorieService)
+
+public CategoriesController(ICategorieService categorieService)
+{
+    _categorieService = categorieService;
+}
+
+[HttpGet]
+[ProducesResponseType(typeof(IEnumerable<Categorie>), StatusCodes.Status200OK)]
+public async Task<ActionResult<IEnumerable<Categorie>>> GetAll()
+{
+    IEnumerable<Categorie> categories = await _categorieService.GetAllAsync();
+    return Ok(categories);
+}
+
+[HttpGet("{id:int:min(1)}")]
+[ProducesResponseType(typeof(Categorie), StatusCodes.Status200OK)]
+[ProducesResponseType(StatusCodes.Status404NotFound)]
+public async Task<ActionResult<Categorie>> GetById(int id)
+{
+    Categorie? categorie = await _categorieService.GetByIdAsync(id);
+
+    if (categorie is null)
     {
-        _categorieService = categorieService;
+        return NotFound(new
+        {
+            message = $"La catégorie avec l'identifiant {id} est introuvable."
+        });
     }
 
-    [HttpGet]
-    [ProducesResponseType(
-        typeof(IEnumerable<Categorie>),
-        StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<Categorie>>> GetAll()
-    {
-        IEnumerable<Categorie> categories =
-            await _categorieService.GetAllAsync();
+    return Ok(categorie);
+}
 
-        return Ok(categories);
+[HttpPost]
+[ProducesResponseType(typeof(Categorie), StatusCodes.Status201Created)]
+[ProducesResponseType(StatusCodes.Status400BadRequest)]
+[ProducesResponseType(StatusCodes.Status409Conflict)]
+public async Task<ActionResult<Categorie>> Create([FromBody] CreateCategorieDto dto)
+{
+    try
+    {
+        Categorie categorie = await _categorieService.CreateAsync(dto);
+
+        return CreatedAtAction(
+            nameof(GetById),
+            new { id = categorie.Id },
+            categorie
+        );
     }
-
-    [HttpGet("{id:int:min(1)}")]
-    [ProducesResponseType(
-        typeof(Categorie),
-        StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Categorie>> GetById(int id)
+    catch (DuplicateResourceException exception)
     {
-        Categorie? categorie =
-            await _categorieService.GetByIdAsync(id);
+        return Conflict(new
+        {
+            message = exception.Message
+        });
+    }
+}
+
+[HttpPut("{id:int:min(1)}")]
+[ProducesResponseType(typeof(Categorie), StatusCodes.Status200OK)]
+[ProducesResponseType(StatusCodes.Status400BadRequest)]
+[ProducesResponseType(StatusCodes.Status404NotFound)]
+[ProducesResponseType(StatusCodes.Status409Conflict)]
+public async Task<ActionResult<Categorie>> Update(
+    int id,
+    [FromBody] UpdateCategorieDto dto)
+{
+    try
+    {
+        Categorie? categorie = await _categorieService.UpdateAsync(id, dto);
 
         if (categorie is null)
         {
@@ -49,88 +92,80 @@ public sealed class CategoriesController : ControllerBase
 
         return Ok(categorie);
     }
-
-    [HttpPost]
-    [ProducesResponseType(
-        typeof(Categorie),
-        StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<ActionResult<Categorie>> Create(
-        [FromBody] CreateCategorieDto dto)
+    catch (DuplicateResourceException exception)
     {
-        try
+        return Conflict(new
         {
-            Categorie categorie =
-                await _categorieService.CreateAsync(dto);
+            message = exception.Message
+        });
+    }
+}
 
-            return CreatedAtAction(
-                nameof(GetById),
-                new { id = categorie.Id },
-                categorie);
-        }
-        catch (DuplicateResourceException exception)
+[HttpDelete("{id:int:min(1)}")]
+[ProducesResponseType(StatusCodes.Status204NoContent)]
+[ProducesResponseType(StatusCodes.Status404NotFound)]
+public async Task<IActionResult> Disable(int id)
+{
+    bool categorieDesactivee = await _categorieService.DisableAsync(id);
+
+    if (!categorieDesactivee)
+    {
+        return NotFound(new
         {
-            return Conflict(new
-            {
-                message = exception.Message
-            });
-        }
+            message = $"La catégorie avec l'identifiant {id} est introuvable ou déjà inactive."
+        });
     }
 
-    [HttpPut("{id:int:min(1)}")]
-    [ProducesResponseType(
-        typeof(Categorie),
-        StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<ActionResult<Categorie>> Update(
-        int id,
-        [FromBody] UpdateCategorieDto dto)
+    return NoContent();
+}
+
+[HttpPatch("{id:int:min(1)}/reactiver")]
+[ProducesResponseType(StatusCodes.Status204NoContent)]
+[ProducesResponseType(StatusCodes.Status404NotFound)]
+public async Task<IActionResult> Reactivate(int id)
+{
+    bool categorieReactivee = await _categorieService.ReactivateAsync(id);
+
+    if (!categorieReactivee)
     {
-        try
+        return NotFound(new
         {
-            Categorie? categorie =
-                await _categorieService.UpdateAsync(id, dto);
-
-            if (categorie is null)
-            {
-                return NotFound(new
-                {
-                    message =
-                        $"La catégorie avec l'identifiant {id} est introuvable."
-                });
-            }
-
-            return Ok(categorie);
-        }
-        catch (DuplicateResourceException exception)
-        {
-            return Conflict(new
-            {
-                message = exception.Message
-            });
-        }
+            message = $"La catégorie avec l'identifiant {id} est introuvable ou déjà active."
+        });
     }
 
-    [HttpDelete("{id:int:min(1)}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Disable(int id)
-    {
-        bool categorieDesactivee =
-            await _categorieService.DisableAsync(id);
+    return NoContent();
+}
 
-        if (!categorieDesactivee)
+[HttpDelete("{id:int:min(1)}/definitif")]
+[ProducesResponseType(StatusCodes.Status204NoContent)]
+[ProducesResponseType(StatusCodes.Status404NotFound)]
+[ProducesResponseType(StatusCodes.Status409Conflict)]
+public async Task<IActionResult> DeletePermanently(int id)
+{
+    try
+    {
+        bool categorieSupprimee =
+            await _categorieService.DeletePermanentlyAsync(id);
+
+        if (!categorieSupprimee)
         {
             return NotFound(new
             {
-                message =
-                    $"La catégorie avec l'identifiant {id} est introuvable ou déjà inactive."
+                message = $"La catégorie avec l'identifiant {id} est introuvable."
             });
         }
 
         return NoContent();
     }
+    catch (BusinessRuleException exception)
+    {
+        return Conflict(new
+        {
+            message = exception.Message
+        });
+    }
+}
+
+
 }

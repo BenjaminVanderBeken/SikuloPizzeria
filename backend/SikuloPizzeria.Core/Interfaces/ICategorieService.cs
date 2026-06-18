@@ -14,4 +14,7 @@ public interface ICategorieService
     Task<Categorie?> UpdateAsync(int id, UpdateCategorieDto dto);
 
     Task<bool> DisableAsync(int id);
+    Task<bool> ReactivateAsync(int id);
+Task<bool> DeletePermanentlyAsync(int id);
+
 }
