@@ -1,1 +1,25 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --sikulo-cream: #fff7df;
+  --sikulo-cream-soft: #fffaf0;
+  --sikulo-orange: #d95f22;
+  --sikulo-orange-dark: #a93f18;
+  --sikulo-gold: #f2b741;
+  --sikulo-leaf: #4f7f43;
+  --sikulo-leaf-dark: #26492f;
+  --sikulo-teal: #2d7f86;
+  --sikulo-teal-dark: #14525a;
+  --sikulo-ink: #24301f;
+  --sikulo-muted: #6f735f;
+  --sikulo-border: #eadfc4;
+  --sikulo-danger: #a93f18;
+  --sikulo-danger-soft: #fde7d9;
+  --sikulo-success-soft: #e5f2d8;
+  --sikulo-warning-soft: #fff0bf;
+  --sikulo-shadow: rgba(89, 57, 24, 0.12);
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--sikulo-cream);
+}

@@ -18,7 +18,6 @@ Task<bool> DisableAsync(int id);
 Task<bool> ExistsByNameAsync(
     string nom,
     int? excludedId = null);
-//ingredients
 Task<bool> ReactivateAsync(int id);
 Task<bool> IsUsedInCompositionAsync(int id);
 Task<bool> DeletePermanentlyAsync(int id);

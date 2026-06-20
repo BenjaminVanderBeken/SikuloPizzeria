@@ -219,4 +219,3 @@ return `Une erreur est survenue (${erreur.status}).`;
 
 }
 }
-//On crée maintenant le service Angular des clients avec HttpClient, les signals et toutes les opérations CRUD.

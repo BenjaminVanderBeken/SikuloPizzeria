@@ -1,9 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   CreateIngredientDto,
   Ingredient,
@@ -56,15 +52,11 @@ export class IngredientsPage implements OnInit {
       type: String(valeur.type ?? '').trim(),
       stockActuel: Number(valeur.stockActuel),
       uniteMesure: String(valeur.uniteMesure ?? '').trim(),
-      prixUnitaire:
-        valeur.prixUnitaire === null
-          ? null
-          : Number(valeur.prixUnitaire),
+      prixUnitaire: valeur.prixUnitaire === null ? null : Number(valeur.prixUnitaire),
       allergenes: this.nettoyerTexte(valeur.allergenes),
     };
 
-    const ingredientId =
-      this.ingredientService.ingredientEnEditionId();
+    const ingredientId = this.ingredientService.ingredientEnEditionId();
 
     if (ingredientId === null) {
       this.ingredientService.creer(dtoCreation).subscribe({
@@ -80,18 +72,14 @@ export class IngredientsPage implements OnInit {
       actif: Boolean(valeur.actif),
     };
 
-    this.ingredientService
-      .modifier(ingredientId, dtoModification)
-      .subscribe({
-        next: () => this.reinitialiserFormulaire(),
-        error: () => undefined,
-      });
+    this.ingredientService.modifier(ingredientId, dtoModification).subscribe({
+      next: () => this.reinitialiserFormulaire(),
+      error: () => undefined,
+    });
   }
 
   modifier(ingredient: Ingredient): void {
-    this.ingredientService.selectionnerPourEdition(
-      ingredient.id,
-    );
+    this.ingredientService.selectionnerPourEdition(ingredient.id);
 
     this.formulaire.patchValue({
       nom: ingredient.nom,
@@ -114,19 +102,15 @@ export class IngredientsPage implements OnInit {
   }
 
   desactiver(ingredient: Ingredient): void {
-    const confirmation = window.confirm(
-      `Desactiver l'ingredient "${ingredient.nom}" ?`,
-    );
+    const confirmation = window.confirm(`Desactiver l'ingredient "${ingredient.nom}" ?`);
 
     if (!confirmation) {
       return;
     }
 
-    this.ingredientService
-      .desactiver(ingredient.id)
-      .subscribe({
-        error: () => undefined,
-      });
+    this.ingredientService.desactiver(ingredient.id).subscribe({
+      error: () => undefined,
+    });
   }
 
   private reinitialiserFormulaire(): void {
@@ -143,40 +127,34 @@ export class IngredientsPage implements OnInit {
     });
   }
 
-  private nettoyerTexte(
-    valeur: string | null | undefined,
-  ): string | null {
+  private nettoyerTexte(valeur: string | null | undefined): string | null {
     const texte = valeur?.trim() ?? '';
 
     return texte.length === 0 ? null : texte;
-  
-}
-reactiver(ingredient: Ingredient): void {
-const confirmation = window.confirm(
-`Réactiver l'ingrédient "${ingredient.nom}" ?`
-);
+  }
+  reactiver(ingredient: Ingredient): void {
+    const confirmation = window.confirm(`Réactiver l'ingrédient "${ingredient.nom}" ?`);
 
-if (!confirmation) {
-return;
-}
+    if (!confirmation) {
+      return;
+    }
 
-this.ingredientService.reactiver(ingredient.id).subscribe({
-error: () => undefined,
-});
-}
+    this.ingredientService.reactiver(ingredient.id).subscribe({
+      error: () => undefined,
+    });
+  }
 
-supprimerDefinitivement(ingredient: Ingredient): void {
-const confirmation = window.confirm(
-`Supprimer définitivement l'ingrédient "${ingredient.nom}" ? Cette action est irréversible.`
-);
+  supprimerDefinitivement(ingredient: Ingredient): void {
+    const confirmation = window.confirm(
+      `Supprimer définitivement l'ingrédient "${ingredient.nom}" ? Cette action est irréversible.`,
+    );
 
-if (!confirmation) {
-return;
-}
+    if (!confirmation) {
+      return;
+    }
 
-this.ingredientService.supprimerDefinitivement(ingredient.id).subscribe({
-error: () => undefined,
-});
-}
-
+    this.ingredientService.supprimerDefinitivement(ingredient.id).subscribe({
+      error: () => undefined,
+    });
+  }
 }

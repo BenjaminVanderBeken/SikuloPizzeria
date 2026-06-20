@@ -180,6 +180,4 @@ public async Task<IActionResult> DeletePermanently(int id)
     }
 }
 
-
 }
-//le contrôleur API complet des clients.

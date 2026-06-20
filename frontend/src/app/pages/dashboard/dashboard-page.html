@@ -14,7 +14,6 @@
 @if (dashboardService.chargement()) { <section class="panel"> <p class="empty-message">Chargement des statistiques...</p> </section>
 } @else if (dashboardService.stats()) { <section class="stats-grid"> <article class="stat-card"> <span>Produits actifs</span> <strong>{{ dashboardService.stats()!.produitsActifs }}</strong> </article>
 
-```
   <article class="stat-card">
     <span>Clients actifs</span>
     <strong>{{ dashboardService.stats()!.clientsActifs }}</strong>
@@ -50,7 +49,6 @@
     <strong>{{ dashboardService.stats()!.compositions }}</strong>
   </article>
 </section>
-```
 
 }
 

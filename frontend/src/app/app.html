@@ -1,71 +1,64 @@
-<header class="app-header">
-  <div class="brand">
-    <span class="brand-mark">S</span>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <img
+        class="brand-logo"
+        src="/images/SikuloLogo.webp.webp"
+        alt="Logo SikuloPizzeria">
+      <div>
+        <h1>SikuloPizzeria</h1>
+        <p>Gestion pizzeria</p>
+      </div>
+    </div>
 
-```
-<div>
-  <strong>Sikulo Pizzeria</strong>
-  <small>Administration</small>
+    <nav class="menu">
+      <a routerLink="/dashboard" routerLinkActive="active">
+        <span>Dashboard</span>
+      </a>
+
+      <a routerLink="/categories" routerLinkActive="active">
+        <span>Categories</span>
+      </a>
+
+      <a routerLink="/produits" routerLinkActive="active">
+        <span>Produits</span>
+      </a>
+
+      <a routerLink="/ingredients" routerLinkActive="active">
+        <span>Ingredients</span>
+      </a>
+
+      <a routerLink="/compositions" routerLinkActive="active">
+        <span>Compositions</span>
+      </a>
+
+      <a routerLink="/clients" routerLinkActive="active">
+        <span>Clients</span>
+      </a>
+
+      <a routerLink="/commandes" routerLinkActive="active">
+        <span>Commandes</span>
+      </a>
+    </nav>
+
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div>
+        <p class="breadcrumb">Application de gestion</p>
+        <h2>SikuloPizzeria</h2>
+      </div>
+
+      <img
+        class="topbar-logo"
+        src="/images/SikuloLogo.webp.webp"
+        alt="Logo SikuloPizzeria">
+    </header>
+
+    <section class="page-container">
+      <router-outlet></router-outlet>
+    </section>
+
+  </main>
 </div>
-```
-
-  </div>
-
-  <nav class="app-nav">
-    <a
-      routerLink="/dashboard"
-      routerLinkActive="active"
-    >
-      Dashboard
-    </a>
-
-```
-<a
-  routerLink="/categories"
-  routerLinkActive="active"
->
-  Catégories
-</a>
-
-<a
-  routerLink="/produits"
-  routerLinkActive="active"
->
-  Produits
-</a>
-
-<a
-  routerLink="/ingredients"
-  routerLinkActive="active"
->
-  Ingrédients
-</a>
-
-<a
-  routerLink="/compositions"
-  routerLinkActive="active"
->
-  Compositions
-</a>
-
-<a
-  routerLink="/clients"
-  routerLinkActive="active"
->
-  Clients
-</a>
-
-<a
-  routerLink="/commandes"
-  routerLinkActive="active"
->
-  Commandes
-</a>
-```
-
-  </nav>
-</header>
-
-<main class="app-main">
-  <router-outlet></router-outlet>
-</main>

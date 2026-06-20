@@ -290,6 +290,24 @@ error: () => undefined,
 });
 }
 
+supprimerDefinitivement(commande: Commande): void {
+const confirmation = window.confirm(
+`Supprimer definitivement la commande ${commande.numeroCommande} ? Cette action est irreversible.`,
+);
+
+if (!confirmation) {
+return;
+}
+
+this.commandeService.effacerErreur();
+
+this.commandeService
+.supprimerDefinitivement(commande.id)
+.subscribe({
+error: () => undefined,
+});
+}
+
 private reinitialiserFormulaire(): void {
 this.details.clear();
 

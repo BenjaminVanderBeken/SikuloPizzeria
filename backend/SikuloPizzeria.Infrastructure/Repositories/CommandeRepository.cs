@@ -422,6 +422,24 @@ public sealed class CommandeRepository : ICommandeRepository
         return affectedRows > 0;
     }
 
+    public async Task<bool> DeleteAsync(int id)
+    {
+        const string sql = """
+            DELETE FROM commandes
+            WHERE id = @Id;
+            """;
+
+        await using var connection = _connectionFactory.CreateConnection();
+        await connection.OpenAsync();
+
+        int affectedRows = await connection.ExecuteAsync(
+            sql,
+            new { Id = id }
+        );
+
+        return affectedRows > 0;
+    }
+
     public async Task<bool> ExistsByNumberAsync(string numeroCommande)
     {
         const string sql = """

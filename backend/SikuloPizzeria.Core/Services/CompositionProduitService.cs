@@ -47,14 +47,14 @@ public async Task<CompositionProduitDto> CreateAsync(
     if (produit is null)
     {
         throw new BusinessRuleException(
-            "Le produit sÃ©lectionnÃ© est introuvable."
+            "Le produit sélectionné est introuvable."
         );
     }
 
     if (!produit.Actif)
     {
         throw new BusinessRuleException(
-            "Le produit sÃ©lectionnÃ© est inactif."
+            "Le produit sélectionné est inactif."
         );
     }
 
@@ -64,14 +64,14 @@ public async Task<CompositionProduitDto> CreateAsync(
     if (ingredient is null)
     {
         throw new BusinessRuleException(
-            "L'ingrÃ©dient sÃ©lectionnÃ© est introuvable."
+            "L'ingrédient sélectionné est introuvable."
         );
     }
 
     if (!ingredient.Actif)
     {
         throw new BusinessRuleException(
-            "L'ingrÃ©dient sÃ©lectionnÃ© est inactif."
+            "L'ingrédient sélectionné est inactif."
         );
     }
 
@@ -83,7 +83,7 @@ public async Task<CompositionProduitDto> CreateAsync(
     if (existeDeja)
     {
         throw new BusinessRuleException(
-            "Cet ingrÃ©dient est dÃ©jÃ  prÃ©sent dans la composition du produit."
+            "Cet ingrédient est déjà présent dans la composition du produit."
         );
     }
 
@@ -100,7 +100,7 @@ public async Task<CompositionProduitDto> CreateAsync(
 
     return await _compositionRepository.GetByIdAsync(id)
         ?? throw new InvalidOperationException(
-            "La composition a Ã©tÃ© enregistrÃ©e mais n'a pas pu Ãªtre relue."
+            "La composition a été enregistrée mais n'a pas pu être relue."
         );
 }
 
@@ -124,7 +124,7 @@ private static string NettoyerUnite(string unite)
     if (texte.Length == 0)
     {
         throw new BusinessRuleException(
-            "L'unitÃ© est obligatoire."
+            "L'unité est obligatoire."
         );
     }
 

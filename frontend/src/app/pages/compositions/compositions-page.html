@@ -6,14 +6,12 @@
       <p>Associez les ingrédients nécessaires à chaque produit.</p>
     </div>
 
-```
 <div class="stats">
   <div class="stat-card">
     <span>Compositions</span>
     <strong>{{ compositionService.nombreCompositions() }}</strong>
   </div>
 </div>
-```
 
   </header>
 
@@ -29,7 +27,6 @@
       </div>
     </div>
 
-```
 <form [formGroup]="formulaire" (ngSubmit)="enregistrer()">
   <div class="form-grid">
     <label>
@@ -102,7 +99,6 @@
     </button>
   </div>
 </form>
-```
 
   </section>
 
@@ -114,7 +110,6 @@
       </div>
     </div>
 
-```
 @if (compositionService.chargement()) {
   <p class="empty-message">Chargement des compositions...</p>
 } @else if (compositionService.compositions().length === 0) {
@@ -160,7 +155,6 @@
     </table>
   </div>
 }
-```
 
   </section>
 </section>

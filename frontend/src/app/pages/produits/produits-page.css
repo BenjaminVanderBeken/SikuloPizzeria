@@ -3,7 +3,7 @@ display: flex;
 flex-direction: column;
 gap: 24px;
 padding: 24px;
-background: #f4f6f8;
+background: var(--sikulo-cream-soft);
 min-height: 100vh;
 }
 
@@ -21,7 +21,7 @@ font-size: 32px;
 
 .page-header p {
 margin: 0;
-color: #5f6b76;
+color: var(--sikulo-muted);
 }
 
 .eyebrow {
@@ -29,7 +29,7 @@ font-size: 13px;
 font-weight: 700;
 text-transform: uppercase;
 letter-spacing: 1px;
-color: #c0392b;
+color: var(--sikulo-orange);
 }
 
 .stat-card {
@@ -37,26 +37,26 @@ min-width: 160px;
 padding: 18px;
 border-radius: 12px;
 background: #ffffff;
-box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+box-shadow: 0 4px 14px var(--sikulo-shadow);
 text-align: center;
 }
 
 .stat-card span {
 display: block;
 margin-bottom: 6px;
-color: #5f6b76;
+color: var(--sikulo-muted);
 }
 
 .stat-card strong {
 font-size: 30px;
-color: #c0392b;
+color: var(--sikulo-orange);
 }
 
 .panel {
 padding: 24px;
 border-radius: 14px;
 background: #ffffff;
-box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+box-shadow: 0 4px 14px var(--sikulo-shadow);
 }
 
 .panel-header {
@@ -72,7 +72,7 @@ margin: 0 0 6px;
 
 .panel-header p {
 margin: 0;
-color: #6b7280;
+color: var(--sikulo-muted);
 }
 
 .form-grid {
@@ -94,7 +94,7 @@ textarea {
 width: 100%;
 box-sizing: border-box;
 padding: 10px 12px;
-border: 1px solid #ccd2d8;
+border: 1px solid var(--sikulo-border);
 border-radius: 8px;
 background: #ffffff;
 font: inherit;
@@ -104,8 +104,8 @@ input:focus,
 select:focus,
 textarea:focus {
 outline: none;
-border-color: #c0392b;
-box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.12);
+border-color: var(--sikulo-orange);
+box-shadow: 0 0 0 3px rgba(217, 95, 34, 0.14);
 }
 
 textarea {
@@ -136,14 +136,14 @@ width: auto;
 }
 
 .validation {
-color: #b42318;
+color: var(--sikulo-danger);
 font-weight: 500;
 }
 
 .variantes-section {
 margin-top: 28px;
 padding-top: 24px;
-border-top: 1px solid #e4e7eb;
+border-top: 1px solid var(--sikulo-border);
 }
 
 .section-title {
@@ -160,7 +160,7 @@ margin: 0 0 6px;
 
 .section-title p {
 margin: 0;
-color: #6b7280;
+color: var(--sikulo-muted);
 }
 
 .variantes-list {
@@ -175,9 +175,9 @@ grid-template-columns: 2fr 1fr 1fr auto auto;
 gap: 12px;
 align-items: end;
 padding: 16px;
-border: 1px solid #e1e5e9;
+border: 1px solid var(--sikulo-border);
 border-radius: 10px;
-background: #fafafa;
+background: var(--sikulo-cream-soft);
 }
 
 .form-actions {
@@ -200,22 +200,22 @@ cursor: not-allowed;
 }
 
 .primaire {
-background: #c0392b;
+background: var(--sikulo-orange);
 color: #ffffff;
 }
 
 .secondaire {
-background: #e5e7eb;
-color: #1f2937;
+background: var(--sikulo-cream);
+color: var(--sikulo-ink);
 }
 
 .modifier {
-background: #2563eb;
+background: var(--sikulo-teal);
 color: #ffffff;
 }
 
 .danger {
-background: #b42318;
+background: var(--sikulo-orange-dark);
 color: #ffffff;
 }
 
@@ -225,16 +225,16 @@ border-radius: 8px;
 }
 
 .erreur {
-background: #fee4e2;
-color: #b42318;
+background: var(--sikulo-danger-soft);
+color: var(--sikulo-danger);
 }
 
 .empty-message {
 margin: 0;
 padding: 18px;
 border-radius: 8px;
-background: #f8fafc;
-color: #64748b;
+background: var(--sikulo-cream-soft);
+color: var(--sikulo-muted);
 text-align: center;
 }
 
@@ -251,20 +251,20 @@ border-collapse: collapse;
 th,
 td {
 padding: 14px 12px;
-border-bottom: 1px solid #e4e7eb;
+border-bottom: 1px solid var(--sikulo-border);
 text-align: left;
 vertical-align: top;
 }
 
 th {
-background: #f8fafc;
-color: #475467;
+background: var(--sikulo-cream);
+color: var(--sikulo-leaf-dark);
 }
 
 td small {
 display: block;
 margin-top: 5px;
-color: #667085;
+color: var(--sikulo-muted);
 }
 
 .inactive-row {
@@ -287,33 +287,33 @@ font-weight: 700;
 }
 
 .actif {
-background: #d1fadf;
-color: #067647;
+background: var(--sikulo-success-soft);
+color: var(--sikulo-leaf-dark);
 }
 
 .inactif {
-background: #e4e7ec;
-color: #475467;
+background: #eee6d5;
+color: var(--sikulo-muted);
 }
 
 .populaire {
-background: #fef0c7;
-color: #b54708;
+background: var(--sikulo-warning-soft);
+color: var(--sikulo-orange-dark);
 }
 
 .supplement {
-background: #e0e7ff;
-color: #3730a3;
+background: #d9eef0;
+color: var(--sikulo-teal-dark);
 }
 
 .ancien-prix {
 display: block;
-color: #667085;
+color: var(--sikulo-muted);
 text-decoration: line-through;
 }
 
 .prix-promotion {
-color: #b42318;
+color: var(--sikulo-orange-dark);
 }
 
 .variantes-resume {
@@ -351,10 +351,10 @@ flex-direction: column;
 }
 }
 .supprimer-definitif {
-background-color: #7f1d1d;
+background-color: #6f2a18;
 color: white;
 }
 
 .supprimer-definitif:hover {
-background-color: #991b1b;
+background-color: var(--sikulo-orange-dark);
 }

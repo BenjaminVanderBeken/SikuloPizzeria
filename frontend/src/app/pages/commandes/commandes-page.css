@@ -34,7 +34,7 @@ gap: 12px;
 .stat-card {
 min-width: 170px;
 padding: 18px;
-border: 1px solid #d9d9d9;
+border: 1px solid var(--sikulo-border);
 border-radius: 12px;
 text-align: center;
 background: white;
@@ -51,7 +51,7 @@ font-size: 1.4rem;
 
 .panel {
 padding: 24px;
-border: 1px solid #d9d9d9;
+border: 1px solid var(--sikulo-border);
 border-radius: 12px;
 background: white;
 }
@@ -85,7 +85,7 @@ textarea {
 width: 100%;
 box-sizing: border-box;
 padding: 10px 12px;
-border: 1px solid #bdbdbd;
+border: 1px solid var(--sikulo-border);
 border-radius: 8px;
 font: inherit;
 }
@@ -97,7 +97,7 @@ resize: vertical;
 .details-section {
 margin-top: 24px;
 padding-top: 20px;
-border-top: 1px solid #e5e7eb;
+border-top: 1px solid var(--sikulo-border);
 }
 
 .section-title {
@@ -124,9 +124,9 @@ grid-template-columns: 2fr 1.5fr 100px 1.5fr auto;
 gap: 12px;
 align-items: end;
 padding: 16px;
-border: 1px solid #e5e7eb;
+border: 1px solid var(--sikulo-border);
 border-radius: 10px;
-background: #f9fafb;
+background: var(--sikulo-cream-soft);
 }
 
 .form-actions {
@@ -148,17 +148,17 @@ opacity: 0.6;
 }
 
 .primaire {
-background: #1d4ed8;
+background: var(--sikulo-orange);
 color: white;
 }
 
 .secondaire {
-background: #e5e7eb;
-color: #111827;
+background: var(--sikulo-cream);
+color: var(--sikulo-ink);
 }
 
 .danger {
-background: #dc2626;
+background: var(--sikulo-orange-dark);
 color: white;
 }
 
@@ -168,8 +168,8 @@ border-radius: 8px;
 }
 
 .erreur {
-background: #fee2e2;
-color: #991b1b;
+background: var(--sikulo-danger-soft);
+color: var(--sikulo-danger);
 }
 
 .commandes-list {
@@ -179,7 +179,7 @@ gap: 18px;
 
 .commande-card {
 padding: 18px;
-border: 1px solid #d1d5db;
+border: 1px solid var(--sikulo-border);
 border-radius: 12px;
 background: #ffffff;
 }
@@ -208,13 +208,25 @@ gap: 14px;
 margin-bottom: 16px;
 }
 
+.commande-actions {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+margin-bottom: 16px;
+}
+
+.supprimer-definitif {
+background: #6f2a18;
+color: white;
+}
+
 .totaux {
 display: flex;
 flex-wrap: wrap;
 gap: 16px;
 padding: 12px 0;
-border-top: 1px solid #e5e7eb;
-border-bottom: 1px solid #e5e7eb;
+border-top: 1px solid var(--sikulo-border);
+border-bottom: 1px solid var(--sikulo-border);
 }
 
 .details-commande {
@@ -232,14 +244,14 @@ margin-bottom: 8px;
 
 .details-commande small {
 display: block;
-color: #6b7280;
+color: var(--sikulo-muted);
 }
 
 .notes {
 margin-top: 16px;
 padding: 12px;
 border-radius: 8px;
-background: #f3f4f6;
+background: var(--sikulo-cream);
 }
 
 .notes p {
@@ -248,7 +260,7 @@ margin: 6px 0;
 
 .empty-message {
 text-align: center;
-color: #6b7280;
+color: var(--sikulo-muted);
 }
 
 @media (max-width: 1000px) {

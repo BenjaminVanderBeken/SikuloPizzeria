@@ -248,6 +248,11 @@ public async Task<bool> UpdatePaymentAsync(
     );
 }
 
+public Task<bool> DeleteAsync(int id)
+{
+    return _commandeRepository.DeleteAsync(id);
+}
+
 private async Task<string> GenererNumeroCommandeAsync()
 {
     for (int tentative = 0; tentative < 10; tentative++)

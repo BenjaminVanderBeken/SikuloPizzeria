@@ -108,5 +108,23 @@ public async Task<IActionResult> UpdatePayment(
     return NoContent();
 }
 
+[HttpDelete("{id:int:min(1)}/definitif")]
+[ProducesResponseType(StatusCodes.Status204NoContent)]
+[ProducesResponseType(StatusCodes.Status404NotFound)]
+public async Task<IActionResult> DeletePermanently(int id)
+{
+    bool supprimee = await _commandeService.DeleteAsync(id);
+
+    if (!supprimee)
+    {
+        return NotFound(new
+        {
+            message = $"La commande avec l'identifiant {id} est introuvable."
+        });
+    }
+
+    return NoContent();
+}
+
 
 }

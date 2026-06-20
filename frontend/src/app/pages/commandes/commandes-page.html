@@ -6,7 +6,6 @@
       <p>Créez une commande, suivez sa préparation et gérez son paiement.</p>
     </div>
 
-```
 <div class="stats">
   <div class="stat-card">
     <span>Commandes</span>
@@ -18,7 +17,6 @@
     <strong>{{ commandeService.chiffreAffaires().toFixed(2) }} EUR</strong>
   </div>
 </div>
-```
 
   </header>
 
@@ -34,7 +32,6 @@
       </div>
     </div>
 
-```
 <form [formGroup]="formulaire" (ngSubmit)="enregistrer()">
   <div class="form-grid">
     <label>
@@ -210,7 +207,6 @@
     </button>
   </div>
 </form>
-```
 
   </section>
 
@@ -222,8 +218,10 @@
       </div>
     </div>
 
-```
-@if (commandeService.chargement()) {
+@if (
+  commandeService.chargement() &&
+  commandeService.commandes().length === 0
+) {
   <p class="empty-message">Chargement des commandes...</p>
 } @else if (commandeService.commandes().length === 0) {
   <p class="empty-message">Aucune commande disponible.</p>
@@ -299,6 +297,16 @@
           </div>
         }
 
+        <div class="commande-actions">
+          <button
+            type="button"
+            class="button supprimer-definitif"
+            (click)="supprimerDefinitivement(commande)"
+          >
+            Supprimer definitivement
+          </button>
+        </div>
+
         <div class="totaux">
           <span>
             Sous-total : {{ commande.sousTotal.toFixed(2) }} EUR
@@ -369,7 +377,6 @@
     }
   </div>
 }
-```
 
   </section>
 </section>

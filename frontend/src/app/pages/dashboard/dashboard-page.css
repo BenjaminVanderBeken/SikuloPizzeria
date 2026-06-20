@@ -7,15 +7,15 @@ gap: 24px;
 .panel,
 .stat-card {
 background: #ffffff;
-border: 1px solid #e5e7eb;
+border: 1px solid var(--sikulo-border);
 border-radius: 18px;
 padding: 24px;
-box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+box-shadow: 0 10px 30px var(--sikulo-shadow);
 }
 
 .eyebrow {
 margin: 0 0 8px;
-color: #dc2626;
+color: var(--sikulo-orange);
 font-weight: 700;
 text-transform: uppercase;
 letter-spacing: 0.08em;
@@ -29,7 +29,7 @@ margin-top: 0;
 
 .page-header p,
 .empty-message {
-color: #64748b;
+color: var(--sikulo-muted);
 }
 
 .stats-grid {
@@ -44,12 +44,12 @@ gap: 8px;
 }
 
 .stat-card span {
-color: #64748b;
+color: var(--sikulo-muted);
 font-weight: 600;
 }
 
 .stat-card strong {
-color: #0f172a;
+color: var(--sikulo-ink);
 font-size: 28px;
 }
 
@@ -60,8 +60,8 @@ font-weight: 600;
 }
 
 .erreur {
-background: #fee2e2;
-color: #991b1b;
+background: var(--sikulo-danger-soft);
+color: var(--sikulo-danger);
 }
 
 @media (max-width: 1000px) {

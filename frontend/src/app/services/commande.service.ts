@@ -91,7 +91,6 @@ modifierStatut(
 id: number,
 dto: UpdateCommandeStatusDto,
 ): Observable<void> {
-this._chargement.set(true);
 this._erreur.set('');
 
 
@@ -109,7 +108,6 @@ return this.http.patch<void>(`${this.apiUrl}/${id}/statut`, dto).pipe(
     this._erreur.set(this.extraireMessage(erreur));
     return throwError(() => erreur);
   }),
-  finalize(() => this._chargement.set(false)),
 );
 
 
@@ -119,7 +117,6 @@ modifierPaiement(
 id: number,
 dto: UpdateCommandePaymentDto,
 ): Observable<void> {
-this._chargement.set(true);
 this._erreur.set('');
 
 
@@ -141,7 +138,25 @@ return this.http.patch<void>(`${this.apiUrl}/${id}/paiement`, dto).pipe(
     this._erreur.set(this.extraireMessage(erreur));
     return throwError(() => erreur);
   }),
-  finalize(() => this._chargement.set(false)),
+);
+
+
+}
+
+supprimerDefinitivement(id: number): Observable<void> {
+this._erreur.set('');
+
+
+return this.http.delete<void>(`${this.apiUrl}/${id}/definitif`).pipe(
+  tap(() => {
+    this._commandes.update((commandes) =>
+      commandes.filter((commande) => commande.id !== id),
+    );
+  }),
+  catchError((erreur: HttpErrorResponse) => {
+    this._erreur.set(this.extraireMessage(erreur));
+    return throwError(() => erreur);
+  }),
 );
 
 

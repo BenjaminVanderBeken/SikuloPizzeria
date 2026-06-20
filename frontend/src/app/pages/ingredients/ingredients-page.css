@@ -4,7 +4,7 @@ flex-direction: column;
 gap: 24px;
 padding: 24px;
 min-height: 100vh;
-background: #f4f6f8;
+background: var(--sikulo-cream-soft);
 }
 
 .page-header {
@@ -21,7 +21,7 @@ font-size: 32px;
 
 .page-header p {
 margin: 0;
-color: #5f6b76;
+color: var(--sikulo-muted);
 }
 
 .eyebrow {
@@ -29,7 +29,7 @@ font-size: 13px;
 font-weight: 700;
 text-transform: uppercase;
 letter-spacing: 1px;
-color: #c0392b;
+color: var(--sikulo-orange);
 }
 
 .stat-card {
@@ -38,25 +38,25 @@ padding: 18px;
 border-radius: 12px;
 background: #ffffff;
 text-align: center;
-box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+box-shadow: 0 4px 14px var(--sikulo-shadow);
 }
 
 .stat-card span {
 display: block;
 margin-bottom: 6px;
-color: #5f6b76;
+color: var(--sikulo-muted);
 }
 
 .stat-card strong {
 font-size: 30px;
-color: #c0392b;
+color: var(--sikulo-orange);
 }
 
 .panel {
 padding: 24px;
 border-radius: 14px;
 background: #ffffff;
-box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+box-shadow: 0 4px 14px var(--sikulo-shadow);
 }
 
 .panel-header {
@@ -73,7 +73,7 @@ margin: 0;
 
 .panel-header p {
 margin: 0;
-color: #6b7280;
+color: var(--sikulo-muted);
 }
 
 .form-grid {
@@ -94,7 +94,7 @@ select {
 width: 100%;
 box-sizing: border-box;
 padding: 10px 12px;
-border: 1px solid #ccd2d8;
+border: 1px solid var(--sikulo-border);
 border-radius: 8px;
 background: #ffffff;
 font: inherit;
@@ -103,8 +103,8 @@ font: inherit;
 input:focus,
 select:focus {
 outline: none;
-border-color: #c0392b;
-box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.12);
+border-color: var(--sikulo-orange);
+box-shadow: 0 0 0 3px rgba(217, 95, 34, 0.14);
 }
 
 .checkbox-label {
@@ -120,7 +120,7 @@ width: auto;
 }
 
 .validation {
-color: #b42318;
+color: var(--sikulo-danger);
 font-weight: 500;
 }
 
@@ -144,22 +144,22 @@ cursor: not-allowed;
 }
 
 .primaire {
-background: #c0392b;
+background: var(--sikulo-orange);
 color: #ffffff;
 }
 
 .secondaire {
-background: #e5e7eb;
-color: #1f2937;
+background: var(--sikulo-cream);
+color: var(--sikulo-ink);
 }
 
 .modifier {
-background: #2563eb;
+background: var(--sikulo-teal);
 color: #ffffff;
 }
 
 .danger {
-background: #b42318;
+background: var(--sikulo-orange-dark);
 color: #ffffff;
 }
 
@@ -169,16 +169,16 @@ border-radius: 8px;
 }
 
 .erreur {
-background: #fee4e2;
-color: #b42318;
+background: var(--sikulo-danger-soft);
+color: var(--sikulo-danger);
 }
 
 .empty-message {
 margin: 0;
 padding: 18px;
 border-radius: 8px;
-background: #f8fafc;
-color: #64748b;
+background: var(--sikulo-cream-soft);
+color: var(--sikulo-muted);
 text-align: center;
 }
 
@@ -195,14 +195,14 @@ border-collapse: collapse;
 th,
 td {
 padding: 14px 12px;
-border-bottom: 1px solid #e4e7eb;
+border-bottom: 1px solid var(--sikulo-border);
 text-align: left;
 vertical-align: top;
 }
 
 th {
-background: #f8fafc;
-color: #475467;
+background: var(--sikulo-cream);
+color: var(--sikulo-leaf-dark);
 }
 
 .inactive-row {
@@ -218,43 +218,43 @@ font-weight: 700;
 }
 
 .actif {
-background: #d1fadf;
-color: #067647;
+background: var(--sikulo-success-soft);
+color: var(--sikulo-leaf-dark);
 }
 
 .inactif {
-background: #e4e7ec;
-color: #475467;
+background: #eee6d5;
+color: var(--sikulo-muted);
 }
 
 .sauce {
-background: #fee4e2;
-color: #b42318;
+background: var(--sikulo-danger-soft);
+color: var(--sikulo-danger);
 }
 
 .viande {
-background: #fef0c7;
-color: #b54708;
+background: var(--sikulo-warning-soft);
+color: var(--sikulo-orange-dark);
 }
 
 .fromage {
-background: #fef9c3;
-color: #854d0e;
+background: #fff6cf;
+color: #7a5521;
 }
 
 .legume {
-background: #dcfce7;
-color: #166534;
+background: var(--sikulo-success-soft);
+color: var(--sikulo-leaf-dark);
 }
 
 .accompagnement {
-background: #e0e7ff;
-color: #3730a3;
+background: #d9eef0;
+color: var(--sikulo-teal-dark);
 }
 
 .autre {
-background: #f3e8ff;
-color: #6b21a8;
+background: #efe5d2;
+color: var(--sikulo-teal-dark);
 }
 
 .actions {

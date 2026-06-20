@@ -12,7 +12,7 @@
   margin-bottom: 24px;
   padding: 24px;
   background: white;
-  border: 1px solid #dedede;
+  border: 1px solid var(--sikulo-border);
   border-radius: 10px;
 }
 
@@ -25,7 +25,7 @@
 input,
 textarea {
   padding: 10px;
-  border: 1px solid #aaa;
+  border: 1px solid var(--sikulo-border);
   border-radius: 6px;
   font: inherit;
 }
@@ -50,11 +50,12 @@ button:disabled {
 }
 
 .secondaire {
-  background: #e8e8e8;
+  background: var(--sikulo-cream);
+  color: var(--sikulo-ink);
 }
 
 .danger {
-  background: #b42318;
+  background: var(--sikulo-orange-dark);
   color: white;
 }
 
@@ -68,12 +69,12 @@ button:disabled {
 }
 
 .alerte--erreur {
-  background: #fee4e2;
-  color: #912018;
+  background: var(--sikulo-danger-soft);
+  color: var(--sikulo-danger);
 }
 
 .erreur-champ {
-  color: #b42318;
+  color: var(--sikulo-danger);
 }
 
 .tableau-conteneur {
@@ -88,7 +89,7 @@ table {
 th,
 td {
   padding: 12px;
-  border-bottom: 1px solid #dedede;
+  border-bottom: 1px solid var(--sikulo-border);
   text-align: left;
 }
 
@@ -99,11 +100,13 @@ td {
 }
 
 .statut--actif {
-  background: #dcfae6;
+  background: var(--sikulo-success-soft);
+  color: var(--sikulo-leaf-dark);
 }
 
 .statut--inactif {
-  background: #eeeeee;
+  background: #eee6d5;
+  color: var(--sikulo-muted);
 }
 
 .case {
