@@ -8,3 +8,5 @@
 *.suo
 *.cache
 *.zip
+package.json
+.agents/

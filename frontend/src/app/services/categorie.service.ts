@@ -4,8 +4,8 @@ import { catchError, finalize, Observable, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import {
 Categorie,
-CreateCategorieRequest,
-UpdateCategorieRequest,
+CreateCategorieDto,
+UpdateCategorieDto,
 } from '../models/categorie.model';
 
 @Injectable({
@@ -45,7 +45,7 @@ this.http
 
 }
 
-creer(donnees: CreateCategorieRequest): Observable<Categorie> {
+creer(donnees: CreateCategorieDto): Observable<Categorie> {
 this.chargementSignal.set(true);
 this.erreurSignal.set(null);
 
@@ -72,7 +72,7 @@ return this.http.post<Categorie>(this.apiUrl, donnees).pipe(
 
 modifier(
 id: number,
-donnees: UpdateCategorieRequest,
+donnees: UpdateCategorieDto,
 ): Observable<Categorie> {
 this.chargementSignal.set(true);
 this.erreurSignal.set(null);

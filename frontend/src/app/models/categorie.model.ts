@@ -6,13 +6,13 @@ export interface Categorie {
   actif: boolean;
 }
 
-export interface CreateCategorieRequest {
+export interface CreateCategorieDto {
   nom: string;
   description: string | null;
   ordreAffichage: number;
 }
 
-export interface UpdateCategorieRequest {
+export interface UpdateCategorieDto {
   nom: string;
   description: string | null;
   ordreAffichage: number;
